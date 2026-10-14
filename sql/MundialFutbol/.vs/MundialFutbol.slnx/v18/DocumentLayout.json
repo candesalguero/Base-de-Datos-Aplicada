@@ -1,0 +1,50 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\00_CrearBaseDatos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:00_CrearBaseDatos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\01_CrearEsquemas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:01_CrearEsquemas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "00_CrearBaseDatos.sql - localhost.master (CANDE\\cande (53))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\00_CrearBaseDatos.sql",
+              "RelativeDocumentMoniker": "00_CrearBaseDatos.sql",
+              "ToolTip": "00_CrearBaseDatos.sql - localhost.master (CANDE\\cande (53))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-10-14T21:48:36.112Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (53))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "01_CrearEsquemas.sql - localhost.MundialFutbol (CANDE\\cande (52))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\01_CrearEsquemas.sql",
+              "RelativeDocumentMoniker": "01_CrearEsquemas.sql",
+              "ToolTip": "01_CrearEsquemas.sql - localhost.MundialFutbol (CANDE\\cande (52))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-10-14T21:44:46.133Z",
+              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (52))"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
