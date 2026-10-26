@@ -15,8 +15,6 @@ USE MundialFutbol;
 GO
 
 
-/*RolArbitral*/
-
 IF NOT EXISTS (
     SELECT *
     FROM INFORMATION_SCHEMA.TABLES
@@ -32,8 +30,6 @@ BEGIN
 END;
 GO
 
-
-/*Arbitro*/
 
 IF NOT EXISTS (
     SELECT *
@@ -57,8 +53,6 @@ BEGIN
 END;
 GO
 
-
-/*ArbitroIdioma*/
 
 IF NOT EXISTS (
     SELECT *

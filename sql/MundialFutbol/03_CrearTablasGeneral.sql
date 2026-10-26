@@ -103,12 +103,18 @@ IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA='general'
 AND TABLE_NAME='IndicadorEconomico')
 BEGIN
-    CREATE TABLE general.IndicadorEconomico(
-        anio smallint PRIMARY KEY,
-        id_pais int not null,
-        pbi decimal(18,2),
-        fecha_actualizacion date not null,
-        CONSTRAINT fk_id_pais FOREIGN KEY (id_pais) REFERENCES general.Pais
+   CREATE TABLE general.IndicadorEconomico(
+    anio smallint NOT NULL,
+    id_pais int NOT NULL,
+    pbi decimal(18,2),
+    fecha_actualizacion date NOT NULL,
+
+    CONSTRAINT PK_IndicadorEconomico
+        PRIMARY KEY (id_pais, anio),
+
+    CONSTRAINT FK_IndicadorEconomico_Pais
+        FOREIGN KEY (id_pais)
+        REFERENCES general.Pais(id)
     )
 END
 GO

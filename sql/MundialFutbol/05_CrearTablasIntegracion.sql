@@ -15,8 +15,6 @@ USE MundialFutbol;
 GO
 
 
-/*FuenteDatos*/
-
 IF NOT EXISTS (
     SELECT *
     FROM INFORMATION_SCHEMA.TABLES
@@ -34,8 +32,6 @@ BEGIN
 END;
 GO
 
-
-/*LogImportacion*/
 
 IF NOT EXISTS (
     SELECT *
@@ -59,8 +55,6 @@ BEGIN
 END;
 GO
 
-
-/*DetalleErrorImportacion*/
 
 IF NOT EXISTS (
     SELECT *
