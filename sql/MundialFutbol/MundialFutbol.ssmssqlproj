@@ -33,6 +33,48 @@
           <AssociatedConnUserName />
           <FullPath>01_CrearEsquemas.sql</FullPath>
         </FileNode>
+        <FileNode Name="20_Tablas_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>20_Tablas_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="21_Funciones_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>21_Funciones_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="22_SP_ABM_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>22_SP_ABM_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="23_SP_Logica_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>23_SP_Logica_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="24_FKs_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>24_FKs_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="25_Testing_Publicidad_Exitoso.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>25_Testing_Publicidad_Exitoso.sql</FullPath>
+        </FileNode>
+        <FileNode Name="26_Testing_Publicidad_Errores.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>26_Testing_Publicidad_Errores.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Varios" Type="3" Sorted="true">
