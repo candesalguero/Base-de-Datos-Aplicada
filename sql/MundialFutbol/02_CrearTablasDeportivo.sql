@@ -222,7 +222,7 @@ BEGIN
             CHECK (minuto BETWEEN 1 AND 120),
 
         CONSTRAINT CK_Tarjeta_MinutoAdicional 
-            CHECK (minuto_adicional IS NULL OR minuto_adicional > 0),
+            CHECK (minuto_adicional IS NULL OR minuto_adicional > 0)
     );
 END;
 GO

@@ -33,6 +33,12 @@
           <AssociatedConnUserName />
           <FullPath>01_CrearEsquemas.sql</FullPath>
         </FileNode>
+        <FileNode Name="02_CrearTablasDeportivo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>02_CrearTablasDeportivo.sql</FullPath>
+        </FileNode>
         <FileNode Name="03_CrearTablasGeneral.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -51,6 +57,12 @@
           <AssociatedConnUserName />
           <FullPath>05_CrearTablasIntegracion.sql</FullPath>
         </FileNode>
+        <FileNode Name="06_Tablas_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>06_Tablas_Publicidad.sql</FullPath>
+        </FileNode>
         <FileNode Name="10_SP_ABM_Arbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -63,23 +75,29 @@
           <AssociatedConnUserName />
           <FullPath>11_Test_SP_ABM_Arbitraje.sql</FullPath>
         </FileNode>
-        <FileNode Name="20_Tablas_Publicidad.sql">
+        <FileNode Name="12_SP_Negocio_Arbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>20_Tablas_Publicidad.sql</FullPath>
+          <FullPath>12_SP_Negocio_Arbitraje.sql</FullPath>
         </FileNode>
-        <FileNode Name="21_Funciones_Publicidad.sql">
+        <FileNode Name="13_Test_SP_Negocio_Arbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>21_Funciones_Publicidad.sql</FullPath>
+          <FullPath>13_Test_SP_Negocio_Arbitraje.sql</FullPath>
         </FileNode>
-        <FileNode Name="22_SP_ABM_Publicidad.sql">
+        <FileNode Name="20_Funciones_Publicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>22_SP_ABM_Publicidad.sql</FullPath>
+          <FullPath>20_Funciones_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="21_SP_ABM_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>21_SP_ABM_Publicidad.sql</FullPath>
         </FileNode>
         <FileNode Name="24_FKs_Publicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
@@ -98,6 +116,12 @@
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>31_Test_SP_ABM_Integracion.sql</FullPath>
+        </FileNode>
+        <FileNode Name="40_SP_ABM_General.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>40_SP_ABM_General.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
