@@ -566,7 +566,7 @@ END CATCH;
 PRINT '';
 PRINT '21. LIMPIEZA DE DATOS';
 
-/* Sanción */
+
 BEGIN TRY
     EXEC arbitraje.usp_SancionArbitral_Eliminar
         @id = 9900;
@@ -578,7 +578,6 @@ BEGIN CATCH
 END CATCH;
 
 
-/* Informe */
 BEGIN TRY
     EXEC arbitraje.usp_InformePostPartido_Eliminar
         @id = 9900;
@@ -590,7 +589,6 @@ BEGIN CATCH
 END CATCH;
 
 
-/* Designación */
 BEGIN TRY
     EXEC arbitraje.usp_DesignacionArbitral_Eliminar
         @id = 9900;
@@ -602,7 +600,6 @@ BEGIN CATCH
 END CATCH;
 
 
-/* Idioma */
 BEGIN TRY
     EXEC arbitraje.usp_ArbitroIdioma_Eliminar
         @id_arbitro = 9900,
@@ -615,7 +612,6 @@ BEGIN CATCH
 END CATCH;
 
 
-/* Árbitro */
 BEGIN TRY
     EXEC arbitraje.usp_Arbitro_Eliminar
         @id = 9900;

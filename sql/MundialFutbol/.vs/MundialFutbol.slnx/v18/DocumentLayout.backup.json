@@ -3,60 +3,56 @@
   "WorkspaceRootPath": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\40_SP_ABM_General.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:40_SP_ABM_General.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\31_Test_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:31_Test_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\30_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:30_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\24_FKs_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:24_FKs_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\20_Funciones_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:20_Funciones_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\06_Tablas_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:06_Tablas_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\13_Test_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:13_Test_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\12_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:12_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\11_Test_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:11_Test_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\10_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:10_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\04_CrearTablasArbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:04_CrearTablasArbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\02_CrearTablasDeportivo.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:02_CrearTablasDeportivo.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\03_CrearTablasGeneral.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:03_CrearTablasGeneral.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\05_CrearTablasIntegracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:05_CrearTablasIntegracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\03_CrearTablasGeneral.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:03_CrearTablasGeneral.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\04_CrearTablasArbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:04_CrearTablasArbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\12_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:12_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\13_Test_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:13_Test_SP_Negocio_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\20_Funciones_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:20_Funciones_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\24_FKs_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:24_FKs_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\30_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:30_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\31_Test_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:31_Test_SP_ABM_Integracion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\10_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:10_SP_ABM_Arbitraje.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\06_Tablas_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:06_Tablas_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\02_CrearTablasDeportivo.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:02_CrearTablasDeportivo.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\01_CrearEsquemas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
@@ -65,6 +61,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\00_CrearBaseDatos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:00_CrearBaseDatos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\40_SP_ABM_General.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|solutionrelative:40_SP_ABM_General.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9C5C3AF9-D397-8EA8-DD02-BC9331A8AC60}|MundialFutbol.ssmssqlproj|C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\21_SP_ABM_Publicidad.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
@@ -78,183 +78,183 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "31_Test_SP_ABM_Integracion.sql - localhost.MundialFutbol (CANDE\\cande (93))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\31_Test_SP_ABM_Integracion.sql",
-              "RelativeDocumentMoniker": "31_Test_SP_ABM_Integracion.sql",
-              "ToolTip": "31_Test_SP_ABM_Integracion.sql - localhost.MundialFutbol (CANDE\\cande (93))",
+              "DocumentIndex": 0,
+              "Title": "11_Test_SP_ABM_Arbitraje.sql - localhost.master (CANDE\\cande (94))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\11_Test_SP_ABM_Arbitraje.sql",
+              "RelativeDocumentMoniker": "11_Test_SP_ABM_Arbitraje.sql",
+              "ToolTip": "11_Test_SP_ABM_Arbitraje.sql - localhost.master (CANDE\\cande (94))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:45:17.122Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (93))"
+              "WhenOpened": "2026-10-26T21:37:10.783Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (94))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "30_SP_ABM_Integracion.sql - localhost.MundialFutbol (CANDE\\cande (92))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\30_SP_ABM_Integracion.sql",
-              "RelativeDocumentMoniker": "30_SP_ABM_Integracion.sql",
-              "ToolTip": "30_SP_ABM_Integracion.sql - localhost.MundialFutbol (CANDE\\cande (92))",
+              "Title": "05_CrearTablasIntegracion.sql - localhost.master (CANDE\\cande (95))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\05_CrearTablasIntegracion.sql",
+              "RelativeDocumentMoniker": "05_CrearTablasIntegracion.sql",
+              "ToolTip": "05_CrearTablasIntegracion.sql - localhost.master (CANDE\\cande (95))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:43:08.048Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (92))"
+              "WhenOpened": "2026-10-25T19:11:41.964Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (95))"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "40_SP_ABM_General.sql - localhost.MundialFutbol (CANDE\\cande (79))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\40_SP_ABM_General.sql",
-              "RelativeDocumentMoniker": "40_SP_ABM_General.sql",
-              "ToolTip": "40_SP_ABM_General.sql - localhost.MundialFutbol (CANDE\\cande (79))",
+              "DocumentIndex": 1,
+              "Title": "03_CrearTablasGeneral.sql - localhost.master (CANDE\\cande (96))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\03_CrearTablasGeneral.sql",
+              "RelativeDocumentMoniker": "03_CrearTablasGeneral.sql",
+              "ToolTip": "03_CrearTablasGeneral.sql - localhost.master (CANDE\\cande (96))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-27T22:18:29.092Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (79))"
+              "WhenOpened": "2026-10-25T19:04:39.353Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (96))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "24_FKs_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (91))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\24_FKs_Publicidad.sql",
-              "RelativeDocumentMoniker": "24_FKs_Publicidad.sql",
-              "ToolTip": "24_FKs_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (91))",
+              "Title": "04_CrearTablasArbitraje.sql - localhost.master (CANDE\\cande (93))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\04_CrearTablasArbitraje.sql",
+              "RelativeDocumentMoniker": "04_CrearTablasArbitraje.sql",
+              "ToolTip": "04_CrearTablasArbitraje.sql - localhost.master (CANDE\\cande (93))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:18:49.259Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (91))"
+              "WhenOpened": "2026-10-25T19:13:51.243Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (93))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "20_Funciones_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (88))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\20_Funciones_Publicidad.sql",
-              "RelativeDocumentMoniker": "20_Funciones_Publicidad.sql",
-              "ToolTip": "20_Funciones_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (88))",
+              "Title": "12_SP_Negocio_Arbitraje.sql - localhost.master (CANDE\\cande (92))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\12_SP_Negocio_Arbitraje.sql",
+              "RelativeDocumentMoniker": "12_SP_Negocio_Arbitraje.sql",
+              "ToolTip": "12_SP_Negocio_Arbitraje.sql - localhost.master (CANDE\\cande (92))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:18:47.484Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (88))"
+              "WhenOpened": "2026-10-27T22:49:47.083Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (92))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "06_Tablas_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (87))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\06_Tablas_Publicidad.sql",
-              "RelativeDocumentMoniker": "06_Tablas_Publicidad.sql",
-              "ToolTip": "06_Tablas_Publicidad.sql - localhost.MundialFutbol (CANDE\\cande (87))",
+              "Title": "13_Test_SP_Negocio_Arbitraje.sql - localhost.master (CANDE\\cande (91))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\13_Test_SP_Negocio_Arbitraje.sql",
+              "RelativeDocumentMoniker": "13_Test_SP_Negocio_Arbitraje.sql",
+              "ToolTip": "13_Test_SP_Negocio_Arbitraje.sql - localhost.master (CANDE\\cande (91))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:18:45.878Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (87))"
+              "WhenOpened": "2026-10-27T22:51:46.138Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (91))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "13_Test_SP_Negocio_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (95))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\13_Test_SP_Negocio_Arbitraje.sql",
-              "RelativeDocumentMoniker": "13_Test_SP_Negocio_Arbitraje.sql",
-              "ToolTip": "13_Test_SP_Negocio_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (95))",
+              "Title": "20_Funciones_Publicidad.sql - localhost.master (CANDE\\cande (90))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\20_Funciones_Publicidad.sql",
+              "RelativeDocumentMoniker": "20_Funciones_Publicidad.sql",
+              "ToolTip": "20_Funciones_Publicidad.sql - localhost.master (CANDE\\cande (90))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-27T22:51:46.138Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (95))"
+              "WhenOpened": "2026-10-26T21:18:47.484Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (90))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "12_SP_Negocio_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (51))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\12_SP_Negocio_Arbitraje.sql",
-              "RelativeDocumentMoniker": "12_SP_Negocio_Arbitraje.sql",
-              "ToolTip": "12_SP_Negocio_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (51))",
+              "Title": "24_FKs_Publicidad.sql - localhost.master (CANDE\\cande (89))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\24_FKs_Publicidad.sql",
+              "RelativeDocumentMoniker": "24_FKs_Publicidad.sql",
+              "ToolTip": "24_FKs_Publicidad.sql - localhost.master (CANDE\\cande (89))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-27T22:49:47.083Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (51))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "04_CrearTablasArbitraje.sql - localhost.MundialFutbol (CANDE\\cande (66))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\04_CrearTablasArbitraje.sql",
-              "RelativeDocumentMoniker": "04_CrearTablasArbitraje.sql",
-              "ToolTip": "04_CrearTablasArbitraje.sql - localhost.MundialFutbol (CANDE\\cande (66))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-25T19:13:51.243Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (66))"
+              "WhenOpened": "2026-10-26T21:18:49.259Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (89))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "11_Test_SP_ABM_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (80))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\11_Test_SP_ABM_Arbitraje.sql",
-              "RelativeDocumentMoniker": "11_Test_SP_ABM_Arbitraje.sql",
-              "ToolTip": "11_Test_SP_ABM_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (80))",
+              "Title": "30_SP_ABM_Integracion.sql - localhost.master (CANDE\\cande (88))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\30_SP_ABM_Integracion.sql",
+              "RelativeDocumentMoniker": "30_SP_ABM_Integracion.sql",
+              "ToolTip": "30_SP_ABM_Integracion.sql - localhost.master (CANDE\\cande (88))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:37:10.783Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (80))"
+              "WhenOpened": "2026-10-26T21:43:08.048Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (88))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "10_SP_ABM_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (86))",
+              "Title": "31_Test_SP_ABM_Integracion.sql - localhost.master (CANDE\\cande (86))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\31_Test_SP_ABM_Integracion.sql",
+              "RelativeDocumentMoniker": "31_Test_SP_ABM_Integracion.sql",
+              "ToolTip": "31_Test_SP_ABM_Integracion.sql - localhost.master (CANDE\\cande (86))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-10-26T21:45:17.122Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (86))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "10_SP_ABM_Arbitraje.sql - localhost.master (CANDE\\cande (82))",
               "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\10_SP_ABM_Arbitraje.sql",
               "RelativeDocumentMoniker": "10_SP_ABM_Arbitraje.sql",
-              "ToolTip": "10_SP_ABM_Arbitraje.sql - localhost.MundialFutbol (CANDE\\cande (86))",
+              "ToolTip": "10_SP_ABM_Arbitraje.sql - localhost.master (CANDE\\cande (82))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
               "WhenOpened": "2026-10-25T19:24:05.695Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (86))"
+              "EditorCaption": " - localhost.master (CANDE\\cande (82))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "02_CrearTablasDeportivo.sql - localhost.MundialFutbol (CANDE\\cande (71))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\02_CrearTablasDeportivo.sql",
-              "RelativeDocumentMoniker": "02_CrearTablasDeportivo.sql",
-              "ToolTip": "02_CrearTablasDeportivo.sql - localhost.MundialFutbol (CANDE\\cande (71))",
+              "Title": "06_Tablas_Publicidad.sql - localhost.master (CANDE\\cande (81))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\06_Tablas_Publicidad.sql",
+              "RelativeDocumentMoniker": "06_Tablas_Publicidad.sql",
+              "ToolTip": "06_Tablas_Publicidad.sql - localhost.master (CANDE\\cande (81))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-27T22:18:09.842Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (71))"
+              "WhenOpened": "2026-10-26T21:18:45.878Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (81))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
-              "Title": "05_CrearTablasIntegracion.sql - localhost.MundialFutbol (CANDE\\cande (85))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\05_CrearTablasIntegracion.sql",
-              "RelativeDocumentMoniker": "05_CrearTablasIntegracion.sql",
-              "ToolTip": "05_CrearTablasIntegracion.sql - localhost.MundialFutbol (CANDE\\cande (85))",
+              "Title": "02_CrearTablasDeportivo.sql - localhost.master (CANDE\\cande (85))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\02_CrearTablasDeportivo.sql",
+              "RelativeDocumentMoniker": "02_CrearTablasDeportivo.sql",
+              "ToolTip": "02_CrearTablasDeportivo.sql - localhost.master (CANDE\\cande (85))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-25T19:11:41.964Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (85))"
+              "WhenOpened": "2026-10-27T22:18:09.842Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (85))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "03_CrearTablasGeneral.sql - localhost.MundialFutbol (CANDE\\cande (83))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\03_CrearTablasGeneral.sql",
-              "RelativeDocumentMoniker": "03_CrearTablasGeneral.sql",
-              "ToolTip": "03_CrearTablasGeneral.sql - localhost.MundialFutbol (CANDE\\cande (83))",
+              "Title": "01_CrearEsquemas.sql - localhost.master (CANDE\\cande (83))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\01_CrearEsquemas.sql",
+              "RelativeDocumentMoniker": "01_CrearEsquemas.sql",
+              "ToolTip": "01_CrearEsquemas.sql - localhost.master (CANDE\\cande (83))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-25T19:04:39.353Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (83))"
+              "WhenOpened": "2026-10-14T21:44:46.133Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (83))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 14,
-              "Title": "01_CrearEsquemas.sql - localhost.MundialFutbol (CANDE\\cande (82))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\01_CrearEsquemas.sql",
-              "RelativeDocumentMoniker": "01_CrearEsquemas.sql",
-              "ToolTip": "01_CrearEsquemas.sql - localhost.MundialFutbol (CANDE\\cande (82))",
+              "Title": "00_CrearBaseDatos.sql - localhost.master (CANDE\\cande (80))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\00_CrearBaseDatos.sql",
+              "RelativeDocumentMoniker": "00_CrearBaseDatos.sql",
+              "ToolTip": "00_CrearBaseDatos.sql - localhost.master (CANDE\\cande (80))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-14T21:44:46.133Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (82))"
+              "WhenOpened": "2026-10-14T21:48:36.112Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (80))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 15,
-              "Title": "00_CrearBaseDatos.sql - localhost.MundialFutbol (CANDE\\cande (84))",
-              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\00_CrearBaseDatos.sql",
-              "RelativeDocumentMoniker": "00_CrearBaseDatos.sql",
-              "ToolTip": "00_CrearBaseDatos.sql - localhost.MundialFutbol (CANDE\\cande (84))",
+              "Title": "40_SP_ABM_General.sql - localhost.master (CANDE\\cande (75))",
+              "DocumentMoniker": "C:\\Users\\cande\\GitHub\\Base-de-Datos-Aplicada\\sql\\MundialFutbol\\40_SP_ABM_General.sql",
+              "RelativeDocumentMoniker": "40_SP_ABM_General.sql",
+              "ToolTip": "40_SP_ABM_General.sql - localhost.master (CANDE\\cande (75))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-14T21:48:36.112Z",
-              "EditorCaption": " - localhost.MundialFutbol (CANDE\\cande (84))"
+              "WhenOpened": "2026-10-27T22:18:29.092Z",
+              "EditorCaption": " - localhost.master (CANDE\\cande (75))"
             },
             {
               "$type": "Document",
@@ -264,8 +264,7 @@
               "RelativeDocumentMoniker": "21_SP_ABM_Publicidad.sql",
               "ToolTip": "21_SP_ABM_Publicidad.sql - localhost.master (CANDE\\cande (89))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-10-26T21:18:48.373Z",
-              "EditorCaption": " - localhost.master (CANDE\\cande (89))"
+              "WhenOpened": "2026-10-26T21:18:48.373Z"
             }
           ]
         }

@@ -448,10 +448,6 @@ BEGIN
 END;
 GO
 
-/* ============================================================
-   DesignacionArbitral - INSERTAR
-   ============================================================ */
-
 CREATE OR ALTER PROCEDURE arbitraje.usp_DesignacionArbitral_Insertar
     @id int,
     @id_partido int,
