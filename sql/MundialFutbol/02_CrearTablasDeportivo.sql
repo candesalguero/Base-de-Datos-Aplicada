@@ -60,6 +60,19 @@ BEGIN
 END;
 GO
 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'deportivo' AND TABLE_NAME = 'AltaBajaConvocatoria')
+BEGIN
+    CREATE TABLE deportivo.AltaBajaConvocatoria (
+        id int IDENTITY(1,1) PRIMARY KEY,
+        id_convocatoria_sale int NOT NULL,
+        id_jugador_entra int NOT NULL,
+        fecha_hora datetime NOT NULL DEFAULT (SYSDATETIME()),
+        motivo varchar(200) NOT NULL,
+        CONSTRAINT FK_AltaBaja_ConvocatoriaSale FOREIGN KEY (id_convocatoria_sale) REFERENCES deportivo.Convocatoria(id),
+        CONSTRAINT FK_AltaBaja_JugadorEntra FOREIGN KEY (id_jugador_entra) REFERENCES deportivo.Jugador(id)
+    );
+END;
+GO
 
 IF NOT EXISTS (
     SELECT * 
@@ -129,6 +142,40 @@ BEGIN
 END;
 GO
 
+--en el der fueron modeladas como debiles, en la practica implicaria muchos joins y para evitar la propagación masiva de claves compuestas a la tabla Sustitucion
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'deportivo' AND TABLE_NAME = 'VentanaCambio')
+BEGIN
+    CREATE TABLE deportivo.VentanaCambio (
+        id int IDENTITY(1,1) PRIMARY KEY,
+        id_partido int NOT NULL,
+        id_seleccion int NOT NULL,
+        numero_ventana tinyint NOT NULL, -- 1, 2, 3 (o 4 en tiempo suplementario)
+        minuto tinyint NOT NULL,
+        periodo char(3) NOT NULL, -- '1T', '2T', '1TS', '2TS', 'ET' (Entretiempos no consumen ventana)
+        CONSTRAINT UQ_VentanaCambio_PartidoSeleccionVentana UNIQUE (id_partido, id_seleccion, numero_ventana),
+        CONSTRAINT FK_VentanaCambio_Partido FOREIGN KEY (id_partido) REFERENCES deportivo.Partido(id),
+        CONSTRAINT FK_VentanaCambio_Seleccion FOREIGN KEY (id_seleccion) REFERENCES deportivo.Seleccion(id),
+        CONSTRAINT CK_VentanaCambio_Periodo CHECK (periodo IN ('1T', '2T', '1TS', '2TS', 'ET')),
+        CONSTRAINT CK_VentanaCambio_NumeroVentana CHECK (numero_ventana BETWEEN 1 AND 4)
+    );
+END;
+GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'deportivo' AND TABLE_NAME = 'Sustitucion')
+BEGIN
+    CREATE TABLE deportivo.Sustitucion (
+        id int IDENTITY(1,1) PRIMARY KEY,
+        id_ventana int NOT NULL,
+        id_convocatoria_sale int NOT NULL,
+        id_convocatoria_entra int NOT NULL,
+        motivo_cambio varchar(50) NOT NULL, -- 'Táctico', 'Lesión', 'Precaución'
+        CONSTRAINT CK_Sustitucion_Motivo CHECK (motivo_cambio IN ('Táctico', 'Lesión', 'Precaución')),
+        CONSTRAINT FK_Sustitucion_Ventana FOREIGN KEY (id_ventana) REFERENCES deportivo.VentanaCambio(id),
+        CONSTRAINT FK_Sustitucion_Sale FOREIGN KEY (id_convocatoria_sale) REFERENCES deportivo.Convocatoria(id),
+        CONSTRAINT FK_Sustitucion_Entra FOREIGN KEY (id_convocatoria_entra) REFERENCES deportivo.Convocatoria(id)
+    );
+END;
+GO
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'deportivo' AND TABLE_NAME = 'AlineacionPartido')
 BEGIN
     CREATE TABLE deportivo.AlineacionPartido (
