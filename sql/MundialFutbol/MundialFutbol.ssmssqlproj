@@ -57,11 +57,11 @@
           <AssociatedConnUserName />
           <FullPath>05_CrearTablasIntegracion.sql</FullPath>
         </FileNode>
-        <FileNode Name="06_Tablas_Publicidad.sql">
+        <FileNode Name="06_CrearTablasPublicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>06_Tablas_Publicidad.sql</FullPath>
+          <FullPath>06_CrearTablasPublicidad.sql</FullPath>
         </FileNode>
         <FileNode Name="10_SP_ABM_Arbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
@@ -117,11 +117,41 @@
           <AssociatedConnUserName />
           <FullPath>31_Test_SP_ABM_Integracion.sql</FullPath>
         </FileNode>
+        <FileNode Name="32_SP_Negocio_Integracion.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>32_SP_Negocio_Integracion.sql</FullPath>
+        </FileNode>
+        <FileNode Name="33_Test_SP_Negocio_Integracion.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>33_Test_SP_Negocio_Integracion.sql</FullPath>
+        </FileNode>
         <FileNode Name="40_SP_ABM_General.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>40_SP_ABM_General.sql</FullPath>
+        </FileNode>
+        <FileNode Name="50_SP_ABM_Deportivo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>50_SP_ABM_Deportivo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="51_Logica_Negocio_Deportivo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>51_Logica_Negocio_Deportivo.sql</FullPath>
+        </FileNode>
+        <FileNode Name="52_Test_Deportivo.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>52_Test_Deportivo.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
