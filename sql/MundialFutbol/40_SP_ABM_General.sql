@@ -18,7 +18,7 @@
 USE MundialFutbol
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Confederacion_Insertar
+CREATE OR ALTER PROCEDURE general.usp_Confederacion_Insertar
 @nombre varchar(100)
 AS
 BEGIN
@@ -41,7 +41,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Confederacion_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Confederacion_Actualizar
 @id int,
 @nombre varchar(100)
 AS
@@ -71,7 +71,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Confederacion_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_Confederacion_Eliminar
 @id int
 AS
 BEGIN
@@ -92,7 +92,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Pais_Insertar
+CREATE OR ALTER PROCEDURE general.usp_Pais_Insertar
 @nombre varchar(100),
 @h_horario varchar(50),
 @confederacion int,
@@ -139,7 +139,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Pais_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Pais_Actualizar
 @id int,
 @nombre varchar(100),
 @h_horario varchar(50),
@@ -191,7 +191,7 @@ WHERE id = @id;
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Pais_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_Pais_Eliminar
 @id int
 AS
 BEGIN
@@ -233,7 +233,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE general.sp_idioma_Insertar
+CREATE OR ALTER PROCEDURE general.usp_idioma_Insertar
 @nombre varchar(50),
 @iso6 char(3)
 AS
@@ -262,7 +262,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Idioma_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Idioma_Actualizar
 @iso639 char(3),
 @nombre varchar(50)
 AS
@@ -296,7 +296,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Idioma_Eliminar 
+CREATE OR ALTER PROCEDURE general.usp_Idioma_Eliminar 
 @iso639 char(3)
 AS
 BEGIN
@@ -323,7 +323,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Moneda_Insertar
+CREATE OR ALTER PROCEDURE general.usp_Moneda_Insertar
 @iso3 char(3),
 @nombre varchar(30)
 AS
@@ -357,7 +357,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Moneda_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Moneda_Actualizar
 @id int,
 @iso3 char(3),
 @nombre varchar(30)
@@ -399,7 +399,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Moneda_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_Moneda_Eliminar
 @id int 
 AS
 BEGIN
@@ -425,7 +425,7 @@ BEGIN
 END 
 GO 
 
-CREATE OR ALTER PROCEDURE general.sp_Fase_Insertar
+CREATE OR ALTER PROCEDURE general.usp_Fase_Insertar
 @nombre varchar(30)
 AS
 BEGIN
@@ -468,7 +468,7 @@ BEGIN
 END 
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Fase_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Fase_Actualizar
 @id int,
 @nombre varchar(30)
 AS
@@ -519,7 +519,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Fase_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_Fase_Eliminar
 @id int 
 AS
 BEGIN
@@ -544,7 +544,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE general.sp_Sede_Insertar
+CREATE OR ALTER PROCEDURE general.usp_Sede_Insertar
 @id_pais int,
 @nombre nvarchar(50),
 @ciudad nvarchar(50),
@@ -590,7 +590,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Sede_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_Sede_Actualizar
 @id int ,
 @id_pais int,
 @nombre nvarchar(50),
@@ -646,7 +646,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_Sede_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_Sede_Eliminar
 @id int 
 AS
 BEGIN
@@ -671,7 +671,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE general.sp_IndicadorEconomico_Insertar
+CREATE OR ALTER PROCEDURE general.usp_IndicadorEconomico_Insertar
 @anio smallint,
 @id_pais int,
 @pbi decimal(18,2)
@@ -709,7 +709,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE general.sp_IndicadorEnocomico_Actualizar
+CREATE OR ALTER PROCEDURE general.usp_IndicadorEconomico_Actualizar
 @anio smallint,
 @id_pais int,
 @pbi decimal(18,2)
@@ -749,7 +749,7 @@ BEGIN
 END
 GO 
 
-CREATE OR ALTER PROCEDURE general.sp_IndicadorEnocomico_Eliminar
+CREATE OR ALTER PROCEDURE general.usp_IndicadorEconomico_Eliminar
 @anio smallint,
 @id_pais int
 AS
@@ -779,3 +779,4 @@ BEGIN
     WHERE anio=@anio AND id_pais = @id_pais;
 END
 GO
+
