@@ -28,19 +28,19 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
-IF OBJECT_ID(N'publicidad.usp_Anunciante_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_Anunciante_Listar')
     DROP PROCEDURE publicidad.usp_Anunciante_Listar;
-IF OBJECT_ID(N'publicidad.usp_Campana_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_Campana_Listar')
     DROP PROCEDURE publicidad.usp_Campana_Listar;
-IF OBJECT_ID(N'publicidad.usp_Tarifa_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_Tarifa_Listar')
     DROP PROCEDURE publicidad.usp_Tarifa_Listar;
-IF OBJECT_ID(N'publicidad.usp_PiezaDeContenido_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_PiezaDeContenido_Listar')
     DROP PROCEDURE publicidad.usp_PiezaDeContenido_Listar;
-IF OBJECT_ID(N'publicidad.usp_EspacioPublicitario_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_EspacioPublicitario_Listar')
     DROP PROCEDURE publicidad.usp_EspacioPublicitario_Listar;
-IF OBJECT_ID(N'publicidad.usp_PiezaDeMercadoDeInteres_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_PiezaDeMercadoDeInteres_Listar')
     DROP PROCEDURE publicidad.usp_PiezaDeMercadoDeInteres_Listar;
-IF OBJECT_ID(N'publicidad.usp_ExhibicionPublicitaria_Listar', N'P') IS NOT NULL
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE schema_id = SCHEMA_ID(N'publicidad') AND name = N'usp_ExhibicionPublicitaria_Listar')
     DROP PROCEDURE publicidad.usp_ExhibicionPublicitaria_Listar;
 GO
 
@@ -107,9 +107,9 @@ BEGIN
         SET @errores += N'- El identificador del anunciante es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Anunciante
-        WHERE id = @id_anunciante AND activo = 1
+        WHERE id = @id_anunciante
     )
-        SET @errores += N'- El anunciante no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El anunciante no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_pais_origen IS NULL
         SET @errores += N'- El pais de origen es obligatorio.' + NCHAR(13) + NCHAR(10);
@@ -152,21 +152,20 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM publicidad.Anunciante
-        WHERE id = @id_anunciante AND activo = 1
+        WHERE id = @id_anunciante
     )
-        SET @errores += N'- El anunciante no existe o ya esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El anunciante no existe.' + NCHAR(13) + NCHAR(10);
 
     IF EXISTS (
         SELECT 1 FROM publicidad.Campana
-        WHERE id_anunciante = @id_anunciante AND activo = 1
+        WHERE id_anunciante = @id_anunciante
     )
-        SET @errores += N'- No se puede dar de baja el anunciante porque tiene campanas activas.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- No se puede eliminar el anunciante porque tiene campanas asociadas.' + NCHAR(13) + NCHAR(10);
 
     IF @errores <> N''
         THROW 50000, @errores, 1;
 
-    UPDATE publicidad.Anunciante
-    SET activo = 0
+    DELETE FROM publicidad.Anunciante
     WHERE id = @id_anunciante;
 END;
 GO
@@ -196,9 +195,9 @@ BEGIN
         SET @errores += N'- El anunciante es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Anunciante
-        WHERE id = @id_anunciante AND activo = 1
+        WHERE id = @id_anunciante
     )
-        SET @errores += N'- El anunciante no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El anunciante no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_moneda IS NULL
         SET @errores += N'- La moneda es obligatoria.' + NCHAR(13) + NCHAR(10);
@@ -256,17 +255,17 @@ BEGIN
         SET @errores += N'- El identificador de la campana es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Campana
-        WHERE id = @id_campana AND activo = 1
+        WHERE id = @id_campana
     )
-        SET @errores += N'- La campana no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La campana no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_anunciante IS NULL
         SET @errores += N'- El anunciante es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Anunciante
-        WHERE id = @id_anunciante AND activo = 1
+        WHERE id = @id_anunciante
     )
-        SET @errores += N'- El anunciante no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El anunciante no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_moneda IS NULL
         SET @errores += N'- La moneda es obligatoria.' + NCHAR(13) + NCHAR(10);
@@ -316,21 +315,20 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM publicidad.Campana
-        WHERE id = @id_campana AND activo = 1
+        WHERE id = @id_campana
     )
-        SET @errores += N'- La campana no existe o ya esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La campana no existe.' + NCHAR(13) + NCHAR(10);
 
     IF EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id_campana = @id_campana AND activo = 1
+        WHERE id_campana = @id_campana
     )
-        SET @errores += N'- No se puede dar de baja la campana porque tiene piezas activas.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- No se puede eliminar la campana porque tiene piezas asociadas.' + NCHAR(13) + NCHAR(10);
 
     IF @errores <> N''
         THROW 50000, @errores, 1;
 
-    UPDATE publicidad.Campana
-    SET activo = 0
+    DELETE FROM publicidad.Campana
     WHERE id = @id_campana;
 END;
 GO
@@ -413,9 +411,9 @@ BEGIN
         SET @errores += N'- El identificador de la tarifa es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Tarifa
-        WHERE id = @id_tarifa AND activo = 1
+        WHERE id = @id_tarifa
     )
-        SET @errores += N'- La tarifa no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La tarifa no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_moneda IS NULL
         SET @errores += N'- La moneda es obligatoria.' + NCHAR(13) + NCHAR(10);
@@ -468,21 +466,20 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM publicidad.Tarifa
-        WHERE id = @id_tarifa AND activo = 1
+        WHERE id = @id_tarifa
     )
-        SET @errores += N'- La tarifa no existe o ya esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La tarifa no existe.' + NCHAR(13) + NCHAR(10);
 
     IF EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id_tarifa = @id_tarifa AND activo = 1
+        WHERE id_tarifa = @id_tarifa
     )
-        SET @errores += N'- No se puede dar de baja la tarifa porque tiene piezas activas.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- No se puede eliminar la tarifa porque tiene piezas asociadas.' + NCHAR(13) + NCHAR(10);
 
     IF @errores <> N''
         THROW 50000, @errores, 1;
 
-    UPDATE publicidad.Tarifa
-    SET activo = 0
+    DELETE FROM publicidad.Tarifa
     WHERE id = @id_tarifa;
 END;
 GO
@@ -513,17 +510,17 @@ BEGIN
         SET @errores += N'- La campana es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Campana
-        WHERE id = @id_campana AND activo = 1
+        WHERE id = @id_campana
     )
-        SET @errores += N'- La campana no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La campana no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_tarifa IS NULL
         SET @errores += N'- La tarifa es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Tarifa
-        WHERE id = @id_tarifa AND activo = 1
+        WHERE id = @id_tarifa
     )
-        SET @errores += N'- La tarifa no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La tarifa no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_idioma IS NULL OR LTRIM(RTRIM(@id_idioma)) = N''
         SET @errores += N'- El idioma es obligatorio.' + NCHAR(13) + NCHAR(10);
@@ -582,25 +579,25 @@ BEGIN
         SET @errores += N'- El identificador de la pieza es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id = @id_pieza AND activo = 1
+        WHERE id = @id_pieza
     )
-        SET @errores += N'- La pieza no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La pieza no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_campana IS NULL
         SET @errores += N'- La campana es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Campana
-        WHERE id = @id_campana AND activo = 1
+        WHERE id = @id_campana
     )
-        SET @errores += N'- La campana no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La campana no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_tarifa IS NULL
         SET @errores += N'- La tarifa es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.Tarifa
-        WHERE id = @id_tarifa AND activo = 1
+        WHERE id = @id_tarifa
     )
-        SET @errores += N'- La tarifa no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La tarifa no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_idioma IS NULL OR LTRIM(RTRIM(@id_idioma)) = N''
         SET @errores += N'- El idioma es obligatorio.' + NCHAR(13) + NCHAR(10);
@@ -651,21 +648,26 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id = @id_pieza AND activo = 1
+        WHERE id = @id_pieza
     )
-        SET @errores += N'- La pieza no existe o ya esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La pieza no existe.' + NCHAR(13) + NCHAR(10);
 
     IF EXISTS (
         SELECT 1 FROM publicidad.ExhibicionPublicitaria
-        WHERE id_pieza = @id_pieza AND estado = 'VIGENTE'
+        WHERE id_pieza = @id_pieza
     )
-        SET @errores += N'- No se puede dar de baja la pieza porque tiene exhibiciones vigentes.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- No se puede eliminar la pieza porque tiene exhibiciones asociadas.' + NCHAR(13) + NCHAR(10);
+
+    IF EXISTS (
+        SELECT 1 FROM publicidad.PiezaDeMercadoDeInteres
+        WHERE id_pieza = @id_pieza
+    )
+        SET @errores += N'- No se puede eliminar la pieza porque tiene mercados de interes asociados.' + NCHAR(13) + NCHAR(10);
 
     IF @errores <> N''
         THROW 50000, @errores, 1;
 
-    UPDATE publicidad.PiezaDeContenido
-    SET activo = 0
+    DELETE FROM publicidad.PiezaDeContenido
     WHERE id = @id_pieza;
 END;
 GO
@@ -728,9 +730,9 @@ BEGIN
         SET @errores += N'- El identificador del espacio es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.EspacioPublicitario
-        WHERE id = @id_espacio_publicitario AND activo = 1
+        WHERE id = @id_espacio_publicitario
     )
-        SET @errores += N'- El espacio publicitario no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El espacio publicitario no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @ubicacion_panel IS NULL OR @ubicacion_panel = N''
         SET @errores += N'- La ubicacion del panel es obligatoria.' + NCHAR(13) + NCHAR(10);
@@ -765,21 +767,20 @@ BEGIN
 
     IF NOT EXISTS (
         SELECT 1 FROM publicidad.EspacioPublicitario
-        WHERE id = @id_espacio_publicitario AND activo = 1
+        WHERE id = @id_espacio_publicitario
     )
-        SET @errores += N'- El espacio publicitario no existe o ya esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El espacio publicitario no existe.' + NCHAR(13) + NCHAR(10);
 
     IF EXISTS (
         SELECT 1 FROM publicidad.ExhibicionPublicitaria
-        WHERE id_espacio_publicitario = @id_espacio_publicitario AND estado = 'VIGENTE'
+        WHERE id_espacio_publicitario = @id_espacio_publicitario
     )
-        SET @errores += N'- No se puede dar de baja el espacio porque tiene exhibiciones vigentes.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- No se puede eliminar el espacio porque tiene exhibiciones asociadas.' + NCHAR(13) + NCHAR(10);
 
     IF @errores <> N''
         THROW 50000, @errores, 1;
 
-    UPDATE publicidad.EspacioPublicitario
-    SET activo = 0
+    DELETE FROM publicidad.EspacioPublicitario
     WHERE id = @id_espacio_publicitario;
 END;
 GO
@@ -802,9 +803,9 @@ BEGIN
         SET @errores += N'- La pieza es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id = @id_pieza AND activo = 1
+        WHERE id = @id_pieza
     )
-        SET @errores += N'- La pieza no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La pieza no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_pais IS NULL
         SET @errores += N'- El pais es obligatorio.' + NCHAR(13) + NCHAR(10);
@@ -873,8 +874,8 @@ BEGIN
         @id_moneda_tarifa = t.id_moneda,
         @costo_tarifa = t.costo_base
     FROM publicidad.PiezaDeContenido AS p
-    JOIN publicidad.Tarifa AS t ON t.id = p.id_tarifa AND t.activo = 1
-    WHERE p.id = @id_pieza AND p.activo = 1;
+    JOIN publicidad.Tarifa AS t ON t.id = p.id_tarifa
+    WHERE p.id = @id_pieza;
 
     IF @id_partido IS NULL
         SET @errores += N'- El partido es obligatorio.' + NCHAR(13) + NCHAR(10);
@@ -884,15 +885,15 @@ BEGIN
     IF @id_pieza IS NULL
         SET @errores += N'- La pieza es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF @id_moneda_tarifa IS NULL
-        SET @errores += N'- La pieza no existe, esta dada de baja o su tarifa no esta activa.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La pieza no existe o su tarifa no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_espacio_publicitario IS NULL
         SET @errores += N'- El espacio publicitario es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.EspacioPublicitario
-        WHERE id = @id_espacio_publicitario AND activo = 1
+        WHERE id = @id_espacio_publicitario
     )
-        SET @errores += N'- El espacio publicitario no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El espacio publicitario no existe.' + NCHAR(13) + NCHAR(10);
 
     SET @id_moneda = ISNULL(@id_moneda, @id_moneda_tarifa);
     SET @costo_aplicado = ISNULL(@costo_aplicado, @costo_tarifa);
@@ -967,17 +968,17 @@ BEGIN
         SET @errores += N'- La pieza es obligatoria.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.PiezaDeContenido
-        WHERE id = @id_pieza AND activo = 1
+        WHERE id = @id_pieza
     )
-        SET @errores += N'- La pieza no existe o esta dada de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- La pieza no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_espacio_publicitario IS NULL
         SET @errores += N'- El espacio publicitario es obligatorio.' + NCHAR(13) + NCHAR(10);
     ELSE IF NOT EXISTS (
         SELECT 1 FROM publicidad.EspacioPublicitario
-        WHERE id = @id_espacio_publicitario AND activo = 1
+        WHERE id = @id_espacio_publicitario
     )
-        SET @errores += N'- El espacio publicitario no existe o esta dado de baja.' + NCHAR(13) + NCHAR(10);
+        SET @errores += N'- El espacio publicitario no existe.' + NCHAR(13) + NCHAR(10);
 
     IF @id_moneda IS NULL
         SET @errores += N'- La moneda es obligatoria.' + NCHAR(13) + NCHAR(10);
@@ -1057,3 +1058,4 @@ BEGIN
     WHERE id = @id_exhibicion;
 END;
 GO
+

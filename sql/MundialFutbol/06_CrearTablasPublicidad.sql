@@ -9,12 +9,14 @@
 
     Objetivo:
     Crear las tablas del esquema publicidad.
-
-    Las claves foraneas hacia general y deportivo se crean en
-    24_FKs_Publicidad.sql, una vez creados esos esquemas.
 */
 
 USE MundialFutbol;
+GO
+
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
 GO
 
 IF NOT EXISTS (
@@ -30,12 +32,14 @@ BEGIN
         id_pais_origen int NOT NULL,
         tax_id varchar(30) NOT NULL UNIQUE,
         nombre_empresa varchar(150) NOT NULL,
-        activo bit NOT NULL DEFAULT (1),
         fecha_alta datetime2(0) NOT NULL DEFAULT (SYSDATETIME()),
         CONSTRAINT CK_Anunciante_TaxId
             CHECK (LEN(LTRIM(RTRIM(tax_id))) > 0),
         CONSTRAINT CK_Anunciante_Nombre
-            CHECK (LEN(LTRIM(RTRIM(nombre_empresa))) > 0)
+            CHECK (LEN(LTRIM(RTRIM(nombre_empresa))) > 0),
+        CONSTRAINT FK_Anunciante_Pais
+            FOREIGN KEY (id_pais_origen)
+            REFERENCES general.Pais(id)
     );
 END;
 GO
@@ -56,7 +60,6 @@ BEGIN
         fecha_inicio date NOT NULL,
         fecha_fin date NOT NULL,
         presupuesto decimal(18,2) NOT NULL,
-        activo bit NOT NULL DEFAULT (1),
         fecha_alta datetime2(0) NOT NULL DEFAULT (SYSDATETIME()),
         CONSTRAINT CK_Campana_Nombre
             CHECK (LEN(LTRIM(RTRIM(nombre))) > 0),
@@ -66,7 +69,10 @@ BEGIN
             CHECK (presupuesto >= 0),
         CONSTRAINT FK_Campana_Anunciante
             FOREIGN KEY (id_anunciante)
-            REFERENCES publicidad.Anunciante(id)
+            REFERENCES publicidad.Anunciante(id),
+        CONSTRAINT FK_Campana_Moneda
+            FOREIGN KEY (id_moneda)
+            REFERENCES general.Moneda(id)
     );
 END;
 GO
@@ -86,7 +92,6 @@ BEGIN
         costo_base decimal(18,2) NOT NULL,
         vigente_desde date NOT NULL,
         vigente_hasta date NULL,
-        activo bit NOT NULL DEFAULT (1),
         fecha_alta datetime2(0) NOT NULL DEFAULT (SYSDATETIME()),
         CONSTRAINT UQ_Tarifa_MonedaNombreVigencia
             UNIQUE (id_moneda, nombre, vigente_desde),
@@ -95,7 +100,10 @@ BEGIN
         CONSTRAINT CK_Tarifa_Costo
             CHECK (costo_base >= 0),
         CONSTRAINT CK_Tarifa_Vigencia
-            CHECK (vigente_hasta IS NULL OR vigente_hasta >= vigente_desde)
+            CHECK (vigente_hasta IS NULL OR vigente_hasta >= vigente_desde),
+        CONSTRAINT FK_Tarifa_Moneda
+            FOREIGN KEY (id_moneda)
+            REFERENCES general.Moneda(id)
     );
 END;
 GO
@@ -116,7 +124,6 @@ BEGIN
         titulo varchar(150) NOT NULL,
         descripcion varchar(500) NULL,
         duracion int NOT NULL,
-        activo bit NOT NULL DEFAULT (1),
         fecha_alta datetime2(0) NOT NULL DEFAULT (SYSDATETIME()),
         CONSTRAINT UQ_PiezaDeContenido_CampanaTituloIdioma
             UNIQUE (id_campana, titulo, id_idioma),
@@ -129,7 +136,10 @@ BEGIN
             REFERENCES publicidad.Campana(id),
         CONSTRAINT FK_PiezaDeContenido_Tarifa
             FOREIGN KEY (id_tarifa)
-            REFERENCES publicidad.Tarifa(id)
+            REFERENCES publicidad.Tarifa(id),
+        CONSTRAINT FK_PiezaDeContenido_Idioma
+            FOREIGN KEY (id_idioma)
+            REFERENCES general.Idioma(ISO639)
     );
 END;
 GO
@@ -146,7 +156,6 @@ BEGIN
         id int IDENTITY(1,1) PRIMARY KEY,
         ubicacion_panel varchar(30) NOT NULL UNIQUE,
         descripcion varchar(200) NULL,
-        activo bit NOT NULL DEFAULT (1),
         CONSTRAINT CK_EspacioPublicitario_Panel
             CHECK (ubicacion_panel IN ('Panel 1', 'Panel 2', 'Panel 3', 'Panel 4'))
     );
@@ -192,7 +201,13 @@ BEGIN
             REFERENCES publicidad.PiezaDeContenido(id),
         CONSTRAINT FK_ExhibicionPublicitaria_Espacio
             FOREIGN KEY (id_espacio_publicitario)
-            REFERENCES publicidad.EspacioPublicitario(id)
+            REFERENCES publicidad.EspacioPublicitario(id),
+        CONSTRAINT FK_ExhibicionPublicitaria_Partido
+            FOREIGN KEY (id_partido)
+            REFERENCES deportivo.Partido(id),
+        CONSTRAINT FK_ExhibicionPublicitaria_Moneda
+            FOREIGN KEY (id_moneda)
+            REFERENCES general.Moneda(id)
     );
 END;
 GO
@@ -213,7 +228,10 @@ BEGIN
             PRIMARY KEY (id_pieza, id_pais),
         CONSTRAINT FK_PiezaDeMercadoDeInteres_Pieza
             FOREIGN KEY (id_pieza)
-            REFERENCES publicidad.PiezaDeContenido(id)
+            REFERENCES publicidad.PiezaDeContenido(id),
+        CONSTRAINT FK_PiezaDeMercadoDeInteres_Pais
+            FOREIGN KEY (id_pais)
+            REFERENCES general.Pais(id)
     );
 END;
 GO
@@ -257,7 +275,13 @@ GO
 IF NOT EXISTS (
     SELECT *
     FROM sys.indexes
-    WHERE object_id = OBJECT_ID('publicidad.ExhibicionPublicitaria')
+    WHERE object_id = (
+        SELECT t.object_id
+        FROM sys.tables AS t
+        INNER JOIN sys.schemas AS s ON s.schema_id = t.schema_id
+        WHERE s.name = 'publicidad'
+          AND t.name = 'ExhibicionPublicitaria'
+    )
       AND name = 'UX_ExhibicionPublicitaria_PartidoEspacio_Vigente'
 )
     CREATE UNIQUE INDEX UX_ExhibicionPublicitaria_PartidoEspacio_Vigente
@@ -268,7 +292,13 @@ GO
 IF NOT EXISTS (
     SELECT *
     FROM sys.indexes
-    WHERE object_id = OBJECT_ID('publicidad.ExhibicionPublicitaria')
+    WHERE object_id = (
+        SELECT t.object_id
+        FROM sys.tables AS t
+        INNER JOIN sys.schemas AS s ON s.schema_id = t.schema_id
+        WHERE s.name = 'publicidad'
+          AND t.name = 'ExhibicionPublicitaria'
+    )
       AND name = 'UX_ExhibicionPublicitaria_PartidoPieza_Vigente'
 )
     CREATE UNIQUE INDEX UX_ExhibicionPublicitaria_PartidoPieza_Vigente

@@ -8,7 +8,7 @@
           <Type>SQL</Type>
           <Server>localhost</Server>
           <UserName />
-          <Authentication>Autenticación de Windows</Authentication>
+          <Authentication>AutenticaciÃ³n de Windows</Authentication>
           <InitialDB />
           <LoginTimeout>15</LoginTimeout>
           <TrustServerCertificate>True</TrustServerCertificate>
@@ -99,12 +99,22 @@
           <AssociatedConnUserName />
           <FullPath>21_SP_ABM_Publicidad.sql</FullPath>
         </FileNode>
-        <FileNode Name="24_FKs_Publicidad.sql">
+        <FileNode Name="22_SP_Negocio_Publicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>24_FKs_Publicidad.sql</FullPath>
+          <FullPath>22_SP_Negocio_Publicidad.sql</FullPath>
         </FileNode>
+        <FileNode Name="23_Test_SP_ABM_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnUserName />
+          <FullPath>23_Test_SP_ABM_Publicidad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="24_Test_SP_Negocio_Publicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnUserName />
+          <FullPath>24_Test_SP_Negocio_Publicidad.sql</FullPath>
+        </FileNode>        
         <FileNode Name="30_SP_ABM_Integracion.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -160,3 +170,5 @@
     </LogicalFolder>
   </Items>
 </SqlWorkbenchSqlProject>
+
+
