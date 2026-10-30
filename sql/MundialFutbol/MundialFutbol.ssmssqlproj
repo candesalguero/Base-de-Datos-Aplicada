@@ -3,12 +3,26 @@
   <Items>
     <LogicalFolder Name="Conexiones" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost:CANDE\cande">
+        <ConnectionNode Name="localhost:">
           <Created>2026-10-14T18:41:13.4681525-03:00</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
           <UserName />
-          <Authentication>AutenticaciÃ³n de Windows</Authentication>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>15</LoginTimeout>
+          <TrustServerCertificate>True</TrustServerCertificate>
+          <EncryptionOption>True</EncryptionOption>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Consulta</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost:CANDE\cande">
+          <Created>2026-10-30T19:33:46.1104366-03:00</Created>
+          <Type>SQL</Type>
+          <Server>localhost</Server>
+          <UserName />
+          <Authentication>Autenticación de Windows</Authentication>
           <InitialDB />
           <LoginTimeout>15</LoginTimeout>
           <TrustServerCertificate>True</TrustServerCertificate>
@@ -107,14 +121,16 @@
         </FileNode>
         <FileNode Name="23_Test_SP_ABM_Publicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>23_Test_SP_ABM_Publicidad.sql</FullPath>
         </FileNode>
         <FileNode Name="24_Test_SP_Negocio_Publicidad.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>24_Test_SP_Negocio_Publicidad.sql</FullPath>
-        </FileNode>        
+        </FileNode>
         <FileNode Name="30_SP_ABM_Integracion.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -145,6 +161,12 @@
           <AssociatedConnUserName />
           <FullPath>40_SP_ABM_General.sql</FullPath>
         </FileNode>
+        <FileNode Name="41_TEST_SP_ABM_General.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>41_TEST_SP_ABM_General.sql</FullPath>
+        </FileNode>
         <FileNode Name="50_SP_ABM_Deportivo.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -163,6 +185,24 @@
           <AssociatedConnUserName />
           <FullPath>52_Test_Deportivo.sql</FullPath>
         </FileNode>
+        <FileNode Name="60_Tablas_Staging_Partidos.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>60_Tablas_Staging_Partidos.sql</FullPath>
+        </FileNode>
+        <FileNode Name="61_SP_Importar_Partidos_CSV.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>61_SP_Importar_Partidos_CSV.sql</FullPath>
+        </FileNode>
+        <FileNode Name="62_Test_Importar_Partidos_CSV.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>62_Test_Importar_Partidos_CSV.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Varios" Type="3" Sorted="true">
@@ -170,5 +210,3 @@
     </LogicalFolder>
   </Items>
 </SqlWorkbenchSqlProject>
-
-
