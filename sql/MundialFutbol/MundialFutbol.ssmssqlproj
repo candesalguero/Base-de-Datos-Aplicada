@@ -41,41 +41,47 @@
           <AssociatedConnUserName />
           <FullPath>00_CrearBaseDatos.sql</FullPath>
         </FileNode>
-        <FileNode Name="01_CrearEsquemas.sql">
+        <FileNode Name="01_Drop_Database.sql.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>01_CrearEsquemas.sql</FullPath>
+          <FullPath>01_Drop_Database.sql.sql</FullPath>
         </FileNode>
-        <FileNode Name="02_CrearTablasDeportivo.sql">
+        <FileNode Name="02_CrearEsquemas.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>02_CrearTablasDeportivo.sql</FullPath>
+          <FullPath>02_CrearEsquemas.sql</FullPath>
         </FileNode>
-        <FileNode Name="03_CrearTablasGeneral.sql">
+        <FileNode Name="03_CrearTablasDeportivo.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>03_CrearTablasGeneral.sql</FullPath>
+          <FullPath>03_CrearTablasDeportivo.sql</FullPath>
         </FileNode>
-        <FileNode Name="04_CrearTablasArbitraje.sql">
+        <FileNode Name="04_CrearTablasGeneral.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>04_CrearTablasArbitraje.sql</FullPath>
+          <FullPath>04_CrearTablasGeneral.sql</FullPath>
         </FileNode>
-        <FileNode Name="05_CrearTablasIntegracion.sql">
+        <FileNode Name="05_CrearTablasArbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>05_CrearTablasIntegracion.sql</FullPath>
+          <FullPath>05_CrearTablasArbitraje.sql</FullPath>
         </FileNode>
-        <FileNode Name="06_CrearTablasPublicidad.sql">
+        <FileNode Name="06_CrearTablasIntegracion.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>06_CrearTablasPublicidad.sql</FullPath>
+          <FullPath>06_CrearTablasIntegracion.sql</FullPath>
+        </FileNode>
+        <FileNode Name="07_CrearTablasPublicidad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>07_CrearTablasPublicidad.sql</FullPath>
         </FileNode>
         <FileNode Name="10_SP_ABM_Arbitraje.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
