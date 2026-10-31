@@ -47,7 +47,19 @@ CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarGol
 AS
 BEGIN
     SET NOCOUNT ON;
-    BEGIN TRANSACTION;
+
+    DECLARE @TranIniciadaLocalmente bit = 0;
+
+    IF @@TRANCOUNT = 0
+    BEGIN
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroGol;
+    END;
+
     BEGIN TRY
         DECLARE @errores nvarchar(2047) = N'';
         DECLARE @id_seleccion_autor int;
@@ -88,10 +100,22 @@ BEGIN
             UPDATE deportivo.Partido SET goles_visitante = ISNULL(goles_visitante, 0) + 1 WHERE id = @id_partido;
         END
 
-        COMMIT TRANSACTION;
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroGol;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
         DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
         THROW 50000, @err, 1;
     END CATCH
@@ -119,57 +143,62 @@ CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarFormacionEquipo
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2047) = N'';
 
-    -- 1. Se vuelcan los 11 parámetros en una variable de tabla
-    DECLARE @Titulares TABLE (id_convocatoria INT);
+    DECLARE @TranIniciadaLocalmente bit = 0;
 
-    INSERT INTO @Titulares (id_convocatoria)
-    VALUES 
-        (@id_convocatoria_titular_1), (@id_convocatoria_titular_2), (@id_convocatoria_titular_3),
-        (@id_convocatoria_titular_4), (@id_convocatoria_titular_5), (@id_convocatoria_titular_6),
-        (@id_convocatoria_titular_7), (@id_convocatoria_titular_8), (@id_convocatoria_titular_9),
-        (@id_convocatoria_titular_10), (@id_convocatoria_titular_11);
-
-    -- 2. Validaciones básicas de partido y selección
-    IF @id_partido IS NULL OR NOT EXISTS (SELECT 1 FROM deportivo.Partido WHERE id = @id_partido)
-        SET @errores += N'- El partido indicado no existe.' + NCHAR(13) + NCHAR(10);
-
-    IF @id_seleccion IS NULL OR NOT EXISTS (SELECT 1 FROM deportivo.Seleccion WHERE id = @id_seleccion)
-        SET @errores += N'- La selección indicada no existe.' + NCHAR(13) + NCHAR(10);
-
-    -- 3. VALIDACIÓN ESPECÍFICA: Chequeo de sanciones pendientes e identificación del jugador
-    IF EXISTS (
-        SELECT 1 
-        FROM @Titulares t
-        INNER JOIN deportivo.Sancion s ON t.id_convocatoria = s.id_convocatoria
-        WHERE s.estado = 'Pendiente'
-    )
+    IF @@TRANCOUNT = 0
     BEGIN
-        DECLARE @suspendidos_info NVARCHAR(1000);
-
-        -- Se obtiene el nombre completo, dorsal e ID del/los jugador/es suspendido/s
-        SELECT @suspendidos_info = STRING_AGG(
-            CONCAT(j.nombre, ' ', j.apellido, ' (Dorsal #', c.dorsal, ', ID Convocatoria: ', c.id, ')'),
-            ', '
-        )
-        FROM @Titulares t
-        INNER JOIN deportivo.Sancion s ON t.id_convocatoria = s.id_convocatoria
-        INNER JOIN deportivo.Convocatoria c ON c.id = t.id_convocatoria
-        INNER JOIN deportivo.Jugador j ON j.id = c.id_jugador
-        WHERE s.estado = 'Pendiente';
-
-        SET @errores += N'- No se puede registrar la formación. Jugador(es) suspendido(s): ' 
-                       + @suspendidos_info + NCHAR(13) + NCHAR(10);
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroFormacion;
     END;
 
-    
-    IF @errores <> N''
-        THROW 50000, @errores, 1;
-
-    --  Registro transaccional de Alineación y Jugadores Titulares
-    BEGIN TRANSACTION;
     BEGIN TRY
+        DECLARE @errores NVARCHAR(2047) = N'';
+        DECLARE @Titulares TABLE (id_convocatoria INT);
+
+        INSERT INTO @Titulares (id_convocatoria)
+        VALUES 
+            (@id_convocatoria_titular_1), (@id_convocatoria_titular_2), (@id_convocatoria_titular_3),
+            (@id_convocatoria_titular_4), (@id_convocatoria_titular_5), (@id_convocatoria_titular_6),
+            (@id_convocatoria_titular_7), (@id_convocatoria_titular_8), (@id_convocatoria_titular_9),
+            (@id_convocatoria_titular_10), (@id_convocatoria_titular_11);
+
+        IF @id_partido IS NULL OR NOT EXISTS (SELECT 1 FROM deportivo.Partido WHERE id = @id_partido)
+            SET @errores += N'- El partido indicado no existe.' + NCHAR(13) + NCHAR(10);
+
+        IF @id_seleccion IS NULL OR NOT EXISTS (SELECT 1 FROM deportivo.Seleccion WHERE id = @id_seleccion)
+            SET @errores += N'- La selección indicada no existe.' + NCHAR(13) + NCHAR(10);
+
+        -- Chequeo de sanciones pendientes
+        IF EXISTS (
+            SELECT 1 
+            FROM @Titulares t
+            INNER JOIN deportivo.Sancion s ON t.id_convocatoria = s.id_convocatoria
+            WHERE s.estado = 'Pendiente'
+        )
+        BEGIN
+            DECLARE @suspendidos_info NVARCHAR(1000);
+
+            SELECT @suspendidos_info = STRING_AGG(
+                CONCAT(j.nombre, ' ', j.apellido, ' (Dorsal #', c.dorsal, ', ID Convocatoria: ', c.id, ')'),
+                ', '
+            )
+            FROM @Titulares t
+            INNER JOIN deportivo.Sancion s ON t.id_convocatoria = s.id_convocatoria
+            INNER JOIN deportivo.Convocatoria c ON c.id = t.id_convocatoria
+            INNER JOIN deportivo.Jugador j ON j.id = c.id_jugador
+            WHERE s.estado = 'Pendiente';
+
+            SET @errores += N'- No se puede registrar la formación. Jugador(es) suspendido(s): ' 
+                           + @suspendidos_info + NCHAR(13) + NCHAR(10);
+        END;
+
+        IF @errores <> N'' THROW 50000, @errores, 1;
+
         DECLARE @id_alineacion INT;
 
         INSERT INTO deportivo.AlineacionPartido (id_partido, id_seleccion, id_esquema)
@@ -181,11 +210,24 @@ BEGIN
         SELECT @id_alineacion, id_convocatoria, 1
         FROM @Titulares;
 
-        COMMIT TRANSACTION;
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
-        THROW;
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroFormacion;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
+        THROW 50000, @err, 1;
     END CATCH;
 END;
 GO
@@ -204,7 +246,19 @@ CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarTarjetaYCalcularSancion
 AS
 BEGIN
     SET NOCOUNT ON;
-    BEGIN TRANSACTION;
+
+    DECLARE @TranIniciadaLocalmente bit = 0;
+
+    IF @@TRANCOUNT = 0
+    BEGIN
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroTarjeta;
+    END;
+
     BEGIN TRY
         DECLARE @errores nvarchar(2047) = N'';
 
@@ -219,7 +273,6 @@ BEGIN
 
         IF @errores <> N'' THROW 50000, @errores, 1;
 
-        -- Registrar Tarjeta
         DECLARE @id_tarjeta int;
         EXEC deportivo.usp_Tarjeta_Insertar
             @id_partido = @id_partido,
@@ -232,7 +285,6 @@ BEGIN
             @motivo = @motivo,
             @id_tarjeta = @id_tarjeta OUTPUT;
 
-        -- Lógica de Suspensión (Roja = 1 o 2 partidos / Amarillas = 1 partido cada 2 acumuladas)
         IF @color = 'Roja'
         BEGIN
             DECLARE @fechas_roja tinyint = CASE WHEN @es_roja_directa = 1 THEN 2 ELSE 1 END;
@@ -266,10 +318,22 @@ BEGIN
             END
         END
 
-        COMMIT TRANSACTION;
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroTarjeta;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
         DECLARE @errMessage nvarchar(2047) = ERROR_MESSAGE();
         THROW 50000, @errMessage, 1;
     END CATCH
@@ -285,7 +349,19 @@ CREATE OR ALTER PROCEDURE deportivo.usp_ReemplazarConvocadoPorLesion
 AS
 BEGIN
     SET NOCOUNT ON;
-    BEGIN TRANSACTION;
+
+    DECLARE @TranIniciadaLocalmente bit = 0;
+
+    IF @@TRANCOUNT = 0
+    BEGIN
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroLesion;
+    END;
+
     BEGIN TRY
         DECLARE @errores nvarchar(2047) = N'';
         DECLARE @id_seleccion int;
@@ -298,7 +374,6 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM deportivo.Jugador WHERE id = @id_jugador_nuevo)
             SET @errores += N'- El nuevo jugador a ingresar no existe.' + NCHAR(13) + NCHAR(10);
 
-        -- Regla FIFA: La selección NO debe haber disputado aún su primer partido
         IF EXISTS (
             SELECT 1 FROM deportivo.Partido 
             WHERE (id_seleccion_local = @id_seleccion OR id_seleccion_visitante = @id_seleccion)
@@ -308,19 +383,29 @@ BEGIN
 
         IF @errores <> N'' THROW 50000, @errores, 1;
 
-        -- 1. Registrar el historial de Alta / Baja
         INSERT INTO deportivo.AltaBajaConvocatoria (id_convocatoria_sale, id_jugador_entra, motivo)
         VALUES (@id_convocatoria_sale, @id_jugador_nuevo, @motivo);
 
-        -- 2. Actualizar la convocatoria actual reemplazando al jugador conservando el dorsal
         UPDATE deportivo.Convocatoria
         SET id_jugador = @id_jugador_nuevo
         WHERE id = @id_convocatoria_sale;
 
-        COMMIT TRANSACTION;
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroLesion;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
         DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
         THROW 50000, @err, 1;
     END CATCH
@@ -328,25 +413,76 @@ END;
 GO
 
 --5 VALIDAR CANTIDAD DE JUGADORES EN LA PLANTILLA
-CREATE OR ALTER PROCEDURE deportivo.usp_ValidarPlantillaSeleccion
-    @id_seleccion int
+CREATE OR ALTER PROCEDURE deportivo.usp_ReemplazarConvocadoPorLesion
+    @id_convocatoria_sale int,
+    @id_jugador_nuevo int,
+    @motivo varchar(200)
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores nvarchar(2047) = N'';
-    DECLARE @cant_convocados int;
 
-    SELECT @cant_convocados = COUNT(*) FROM deportivo.Convocatoria WHERE id_seleccion = @id_seleccion;
+    DECLARE @TranIniciadaLocalmente bit = 0;
 
-    IF @cant_convocados < 23 OR @cant_convocados > 26
-        SET @errores += N'- La plantilla de la selección debe tener entre 23 y 26 jugadores convocados (Cantidad actual: ' + CAST(@cant_convocados AS varchar) + N').' + NCHAR(13) + NCHAR(10);
+    IF @@TRANCOUNT = 0
+    BEGIN
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroLesion;
+    END;
 
-    IF @errores <> N'' THROW 50000, @errores, 1;
+    BEGIN TRY
+        DECLARE @errores nvarchar(2047) = N'';
+        DECLARE @id_seleccion int;
 
-    PRINT 'OK - La lista oficial de la selección cumple con la cantidad de jugadores reglamentaria.';
+        SELECT @id_seleccion = id_seleccion FROM deportivo.Convocatoria WHERE id = @id_convocatoria_sale;
+
+        IF @id_seleccion IS NULL
+            SET @errores += N'- La convocatoria que se desea reemplazar no existe.' + NCHAR(13) + NCHAR(10);
+
+        IF NOT EXISTS (SELECT 1 FROM deportivo.Jugador WHERE id = @id_jugador_nuevo)
+            SET @errores += N'- El nuevo jugador a ingresar no existe.' + NCHAR(13) + NCHAR(10);
+
+        IF EXISTS (
+            SELECT 1 FROM deportivo.Partido 
+            WHERE (id_seleccion_local = @id_seleccion OR id_seleccion_visitante = @id_seleccion)
+              AND (goles_local IS NOT NULL OR fecha_hora_utc <= GETDATE())
+        )
+            SET @errores += N'- No se pueden realizar reemplazos de última hora porque la selección ya debutó en el torneo.' + NCHAR(13) + NCHAR(10);
+
+        IF @errores <> N'' THROW 50000, @errores, 1;
+
+        INSERT INTO deportivo.AltaBajaConvocatoria (id_convocatoria_sale, id_jugador_entra, motivo)
+        VALUES (@id_convocatoria_sale, @id_jugador_nuevo, @motivo);
+
+        UPDATE deportivo.Convocatoria
+        SET id_jugador = @id_jugador_nuevo
+        WHERE id = @id_convocatoria_sale;
+
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroLesion;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
+        DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
+        THROW 50000, @err, 1;
+    END CATCH
 END;
 GO
-
+--6 registrar Sustitucion
 
 CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarSustitucion
     @id_partido int,
@@ -359,7 +495,20 @@ CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarSustitucion
 AS
 BEGIN
     SET NOCOUNT ON;
-    BEGIN TRANSACTION;
+
+    DECLARE @TranIniciadaLocalmente bit = 0;
+
+    -- Si no hay transacción activa, la iniciamos; si ya hay (del script de test), guardamos un punto seguro
+    IF @@TRANCOUNT = 0
+    BEGIN
+        BEGIN TRANSACTION;
+        SET @TranIniciadaLocalmente = 1;
+    END
+    ELSE
+    BEGIN
+        SAVE TRANSACTION PuntoSeguroSustitucion;
+    END;
+
     BEGIN TRY
         DECLARE @errores nvarchar(2047) = N'';
         DECLARE @cant_cambios_realizados int;
@@ -368,29 +517,26 @@ BEGIN
         DECLARE @max_ventanas int = 3;
         DECLARE @id_ventana int;
 
-        -- Ajustar límites si estamos en Tiempo Suplementario (1TS o 2TS)
         IF @periodo IN ('1TS', '2TS')
         BEGIN
             SET @max_cambios = 6;
             SET @max_ventanas = 4;
-        END
+        END;
 
-        -- Contar cambios y ventanas usadas previas por este equipo en el partido
         SELECT @cant_cambios_realizados = COUNT(s.id)
         FROM deportivo.Sustitucion s
-        JOIN deportivo.VentanaCambio v ON s.id_ventana = v.id
+        INNER JOIN deportivo.VentanaCambio v ON s.id_ventana = v.id
         WHERE v.id_partido = @id_partido AND v.id_seleccion = @id_seleccion;
 
         SELECT @cant_ventanas_usadas = COUNT(DISTINCT id)
         FROM deportivo.VentanaCambio
-        WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion AND periodo <> 'ET'; -- El entretiempo no consume ventana
+        WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion AND periodo <> 'ET';
 
         IF @cant_cambios_realizados >= @max_cambios
             SET @errores += N'- La selección ha agotado el límite máximo de cambios permitidos (' + CAST(@max_cambios AS varchar) + N').' + NCHAR(13) + NCHAR(10);
 
         IF @errores <> N'' THROW 50000, @errores, 1;
 
-        -- Obtener o crear ventana de cambio para ese minuto/período
         SELECT @id_ventana = id
         FROM deportivo.VentanaCambio
         WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion AND minuto = @minuto AND periodo = @periodo;
@@ -406,18 +552,29 @@ BEGIN
             VALUES (@id_partido, @id_seleccion, @cant_ventanas_usadas + 1, @minuto, @periodo);
 
             SET @id_ventana = SCOPE_IDENTITY();
-        END
+        END;
 
-        -- Insertar el cambio
         INSERT INTO deportivo.Sustitucion (id_ventana, id_convocatoria_sale, id_convocatoria_entra, motivo_cambio)
         VALUES (@id_ventana, @id_convocatoria_sale, @id_convocatoria_entra, @motivo_cambio);
 
-        COMMIT TRANSACTION;
+        IF @TranIniciadaLocalmente = 1
+            COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        IF XACT_STATE() = 1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+            ELSE
+                ROLLBACK TRANSACTION PuntoSeguroSustitucion;
+        END
+        ELSE IF XACT_STATE() = -1
+        BEGIN
+            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+        END;
+
         DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
         THROW 50000, @err, 1;
-    END CATCH
+    END CATCH;
 END;
 GO

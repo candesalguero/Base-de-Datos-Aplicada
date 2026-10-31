@@ -37,9 +37,9 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
-/* ============================================================
-   1. SELECCION
-   ============================================================ */
+
+   --1. SELECCION
+
 
 CREATE OR ALTER PROCEDURE deportivo.usp_Seleccion_Insertar
     @id_pais int,
@@ -244,16 +244,16 @@ GO
   
 
 CREATE OR ALTER PROCEDURE deportivo.usp_Convocatoria_Insertar
-    @id_jugador int,
-    @id_seleccion int,
-    @dorsal tinyint,
-    @posicion_habitual varchar(25),
-    @club_origen varchar(60),
-    @id_convocatoria int = NULL OUTPUT
+    @id_jugador INT,
+    @id_seleccion INT,
+    @dorsal TINYINT,
+    @posicion_habitual VARCHAR(25),
+    @club_origen VARCHAR(60),
+    @id_convocatoria INT = NULL OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores nvarchar(2047) = N'';
+    DECLARE @errores NVARCHAR(2047) = N'';
 
     SET @posicion_habitual = LTRIM(RTRIM(@posicion_habitual));
     SET @club_origen = LTRIM(RTRIM(@club_origen));
@@ -271,11 +271,14 @@ BEGIN
 
     IF @posicion_habitual IS NULL OR @posicion_habitual = N''
         SET @errores += N'- La posición habitual es obligatoria.' + NCHAR(13) + NCHAR(10);
+    ELSE IF @posicion_habitual NOT IN ('Arquero', 'Defensor', 'Mediocampista', 'Delantero')
+        SET @errores += N'- La posición habitual es inválida (debe ser Arquero, Defensor, Mediocampista o Delantero).' + NCHAR(13) + NCHAR(10);
 
     IF @club_origen IS NULL OR @club_origen = N''
         SET @errores += N'- El club de origen es obligatorio.' + NCHAR(13) + NCHAR(10);
 
-    IF @errores <> N'' THROW 50000, @errores, 1;
+    IF @errores <> N'' 
+        THROW 50000, @errores, 1;
 
     INSERT INTO deportivo.Convocatoria (id_jugador, id_seleccion, dorsal, posicion_habitual, club_origen)
     VALUES (@id_jugador, @id_seleccion, @dorsal, @posicion_habitual, @club_origen);
@@ -283,7 +286,6 @@ BEGIN
     SET @id_convocatoria = SCOPE_IDENTITY();
 END;
 GO
-
 CREATE OR ALTER PROCEDURE deportivo.usp_Convocatoria_Actualizar
     @id int,
     @id_jugador int,
@@ -315,6 +317,9 @@ BEGIN
 
     IF @posicion_habitual IS NULL OR @posicion_habitual = N''
         SET @errores += N'- La posición habitual es obligatoria.' + NCHAR(13) + NCHAR(10);
+    ELSE IF @posicion_habitual NOT IN ('Arquero', 'Defensor', 'Mediocampista', 'Delantero')
+        SET @errores += N'- La posición habitual es inválida (debe ser Arquero, Defensor, Mediocampista o Delantero).' + NCHAR(13) + NCHAR(10);
+
 
     IF @club_origen IS NULL OR @club_origen = N''
         SET @errores += N'- El club de origen es obligatorio.' + NCHAR(13) + NCHAR(10);

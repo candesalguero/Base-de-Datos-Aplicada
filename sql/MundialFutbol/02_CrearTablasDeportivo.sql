@@ -55,7 +55,10 @@ BEGIN
         CONSTRAINT UQ_Convocatoria_SeleccionDorsal UNIQUE (id_seleccion, dorsal),
         CONSTRAINT CK_Convocatoria_Dorsal CHECK (dorsal BETWEEN 1 AND 99),
         CONSTRAINT FK_Convocatoria_Jugador FOREIGN KEY (id_jugador) REFERENCES deportivo.Jugador(id),
-        CONSTRAINT FK_Convocatoria_Seleccion FOREIGN KEY (id_seleccion) REFERENCES deportivo.Seleccion(id)
+        CONSTRAINT FK_Convocatoria_Seleccion FOREIGN KEY (id_seleccion) REFERENCES deportivo.Seleccion(id),
+        CONSTRAINT CK_Convocatoria_PosicionHabitual CHECK (
+            posicion_habitual IN ('Arquero', 'Defensor', 'Mediocampista', 'Delantero')
+        )
     );
 END;
 GO
