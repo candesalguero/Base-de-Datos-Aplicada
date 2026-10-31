@@ -1,0 +1,12 @@
+USE master;
+GO
+
+IF DB_ID('MundialFutbol') IS NOT NULL
+BEGIN
+    ALTER DATABASE MundialFutbol
+    SET SINGLE_USER
+    WITH ROLLBACK IMMEDIATE;
+
+    DROP DATABASE MundialFutbol;
+END;
+GO
