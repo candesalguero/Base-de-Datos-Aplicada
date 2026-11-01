@@ -419,7 +419,6 @@ BEGIN CATCH
 END CATCH;
 PRINT '';
 
-
 PRINT '  11. Registrar Gol con Jugador Inexistente';
 
 BEGIN TRY
@@ -436,6 +435,255 @@ BEGIN CATCH
     PRINT 'OK - Se capturó con éxito la excepción esperada (THROW 50000):';
     PRINT ERROR_MESSAGE();
 END CATCH;
+PRINT '';
+
+PRINT '  12. Validar Plantilla Incompleta';
+
+SAVE TRANSACTION Test_PlantillaIncompleta;
+
+BEGIN TRY
+
+    EXEC deportivo.usp_ValidarPlantillaSeleccion
+        @id_seleccion = @id_sel_a;
+
+    PRINT 'ERROR - El procedimiento debió rechazar la plantilla incompleta.';
+
+END TRY
+BEGIN CATCH
+
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION Test_PlantillaIncompleta;
+
+    PRINT 'OK - Se rechazó correctamente la plantilla con menos de 23 jugadores:';
+    PRINT ERROR_MESSAGE();
+
+END CATCH;
+
+PRINT '';
+
+PRINT '  13. Completar Plantilla y Validar 23 Convocados';
+
+DECLARE @j18 int, @j19 int, @j20 int,
+        @j21 int, @j22 int, @j23 int;
+
+
+/* Jugador 18 */
+INSERT INTO deportivo.Jugador
+(
+    id_pais_nacimiento,
+    nombre,
+    apellido,
+    fecha_nacimiento,
+    documento_identidad
+)
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test18',
+    '2000-01-01',
+    'DOC_BOCA_18'
+);
+
+SET @j18 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j18,
+    @id_sel_a,
+    18,
+    'Defensor',
+    'Club Test'
+);
+
+
+/* Jugador 19 */
+INSERT INTO deportivo.Jugador
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test19',
+    '2000-01-01',
+    'DOC_BOCA_19'
+);
+
+SET @j19 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j19,
+    @id_sel_a,
+    19,
+    'Defensor',
+    'Club Test'
+);
+
+
+/* Jugador 20 */
+INSERT INTO deportivo.Jugador
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test20',
+    '2000-01-01',
+    'DOC_BOCA_20'
+);
+
+SET @j20 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j20,
+    @id_sel_a,
+    20,
+    'Mediocampista',
+    'Club Test'
+);
+
+
+/* Jugador 21 */
+INSERT INTO deportivo.Jugador
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test21',
+    '2000-01-01',
+    'DOC_BOCA_21'
+);
+
+SET @j21 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j21,
+    @id_sel_a,
+    21,
+    'Mediocampista',
+    'Club Test'
+);
+
+
+/* Jugador 22 */
+INSERT INTO deportivo.Jugador
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test22',
+    '2000-01-01',
+    'DOC_BOCA_22'
+);
+
+SET @j22 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j22,
+    @id_sel_a,
+    22,
+    'Delantero',
+    'Club Test'
+);
+
+
+/* Jugador 23 */
+INSERT INTO deportivo.Jugador
+VALUES
+(
+    1990,
+    'Jugador',
+    'Test23',
+    '2000-01-01',
+    'DOC_BOCA_23'
+);
+
+SET @j23 = SCOPE_IDENTITY();
+
+INSERT INTO deportivo.Convocatoria
+(
+    id_jugador,
+    id_seleccion,
+    dorsal,
+    posicion_habitual,
+    club_origen
+)
+VALUES
+(
+    @j23,
+    @id_sel_a,
+    23,
+    'Delantero',
+    'Club Test'
+);
+
+
+/* Validación exitosa */
+BEGIN TRY
+
+    EXEC deportivo.usp_ValidarPlantillaSeleccion
+        @id_seleccion = @id_sel_a;
+
+    PRINT 'OK - Plantilla válida con 23 jugadores.';
+
+    SELECT
+        s.nombre AS seleccion,
+        COUNT(c.id) AS cantidad_convocados
+    FROM deportivo.Seleccion s
+    JOIN deportivo.Convocatoria c
+        ON c.id_seleccion = s.id
+    WHERE s.id = @id_sel_a
+    GROUP BY s.nombre;
+
+END TRY
+BEGIN CATCH
+
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+
+END CATCH;
+
 PRINT '';
 
 -- Limpieza y Reversión Global al finalizar todo el archivo de pruebas

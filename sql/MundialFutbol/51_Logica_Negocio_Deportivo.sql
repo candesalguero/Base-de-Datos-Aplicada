@@ -413,10 +413,9 @@ END;
 GO
 
 --5 VALIDAR CANTIDAD DE JUGADORES EN LA PLANTILLA
-CREATE OR ALTER PROCEDURE deportivo.usp_ReemplazarConvocadoPorLesion
-    @id_convocatoria_sale int,
-    @id_jugador_nuevo int,
-    @motivo varchar(200)
+
+CREATE OR ALTER PROCEDURE deportivo.usp_ValidarPlantillaSeleccion
+    @id_seleccion int
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -430,58 +429,102 @@ BEGIN
     END
     ELSE
     BEGIN
-        SAVE TRANSACTION PuntoSeguroLesion;
+        SAVE TRANSACTION PuntoSeguroPlantilla;
     END;
 
     BEGIN TRY
+
         DECLARE @errores nvarchar(2047) = N'';
-        DECLARE @id_seleccion int;
+        DECLARE @cantidad_jugadores int;
 
-        SELECT @id_seleccion = id_seleccion FROM deportivo.Convocatoria WHERE id = @id_convocatoria_sale;
-
+        /* Validar selección */
         IF @id_seleccion IS NULL
-            SET @errores += N'- La convocatoria que se desea reemplazar no existe.' + NCHAR(13) + NCHAR(10);
+           OR NOT EXISTS (
+                SELECT 1
+                FROM deportivo.Seleccion
+                WHERE id = @id_seleccion
+           )
+        BEGIN
+            SET @errores +=
+                N'- La selección indicada no existe.'
+                + NCHAR(13) + NCHAR(10);
+        END;
 
-        IF NOT EXISTS (SELECT 1 FROM deportivo.Jugador WHERE id = @id_jugador_nuevo)
-            SET @errores += N'- El nuevo jugador a ingresar no existe.' + NCHAR(13) + NCHAR(10);
 
-        IF EXISTS (
-            SELECT 1 FROM deportivo.Partido 
-            WHERE (id_seleccion_local = @id_seleccion OR id_seleccion_visitante = @id_seleccion)
-              AND (goles_local IS NOT NULL OR fecha_hora_utc <= GETDATE())
-        )
-            SET @errores += N'- No se pueden realizar reemplazos de última hora porque la selección ya debutó en el torneo.' + NCHAR(13) + NCHAR(10);
+        /* Obtener cantidad de convocados */
+        IF @id_seleccion IS NOT NULL
+           AND EXISTS (
+                SELECT 1
+                FROM deportivo.Seleccion
+                WHERE id = @id_seleccion
+           )
+        BEGIN
 
-        IF @errores <> N'' THROW 50000, @errores, 1;
+            SELECT @cantidad_jugadores = COUNT(*)
+            FROM deportivo.Convocatoria
+            WHERE id_seleccion = @id_seleccion;
 
-        INSERT INTO deportivo.AltaBajaConvocatoria (id_convocatoria_sale, id_jugador_entra, motivo)
-        VALUES (@id_convocatoria_sale, @id_jugador_nuevo, @motivo);
 
-        UPDATE deportivo.Convocatoria
-        SET id_jugador = @id_jugador_nuevo
-        WHERE id = @id_convocatoria_sale;
+            /* Reglamento Mundial 2026:
+               lista definitiva entre 23 y 26 jugadores */
+            IF @cantidad_jugadores < 23
+            BEGIN
+                SET @errores +=
+                    N'- La selección posee '
+                    + CAST(@cantidad_jugadores AS nvarchar(10))
+                    + N' jugadores convocados. Debe tener como mínimo 23.'
+                    + NCHAR(13) + NCHAR(10);
+            END;
+
+
+            IF @cantidad_jugadores > 26
+            BEGIN
+                SET @errores +=
+                    N'- La selección posee '
+                    + CAST(@cantidad_jugadores AS nvarchar(10))
+                    + N' jugadores convocados. No puede superar los 26.'
+                    + NCHAR(13) + NCHAR(10);
+            END;
+
+        END;
+
+
+        IF @errores <> N''
+            THROW 50000, @errores, 1;
+
 
         IF @TranIniciadaLocalmente = 1
             COMMIT TRANSACTION;
+
     END TRY
     BEGIN CATCH
+
         IF XACT_STATE() = 1
         BEGIN
+
             IF @TranIniciadaLocalmente = 1
                 ROLLBACK TRANSACTION;
             ELSE
-                ROLLBACK TRANSACTION PuntoSeguroLesion;
+                ROLLBACK TRANSACTION PuntoSeguroPlantilla;
+
         END
         ELSE IF XACT_STATE() = -1
         BEGIN
-            IF @TranIniciadaLocalmente = 1 ROLLBACK TRANSACTION;
+
+            IF @TranIniciadaLocalmente = 1
+                ROLLBACK TRANSACTION;
+
         END;
 
-        DECLARE @err NVARCHAR(2047) = ERROR_MESSAGE();
+
+        DECLARE @err nvarchar(2047) = ERROR_MESSAGE();
         THROW 50000, @err, 1;
-    END CATCH
+
+    END CATCH;
+
 END;
 GO
+
 --6 registrar Sustitucion
 
 CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarSustitucion
