@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jugadores>
+    <!-- casos validos                     -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Lionel</nombre>
+        <apellido>Messi</apellido>
+        <fecha_nacimiento>1987-06-24</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_01</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>10</dorsal>
+            <posicion_habitual>Delantero</posicion_habitual>
+            <club_origen>Inter Miami CF</club_origen>
+        </convocatoria>
+    </jugador>
+
+
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Emiliano</nombre>
+        <apellido>Martínez</apellido>
+        <fecha_nacimiento>1992-09-02</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_02</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>23</dorsal>
+            <posicion_habitual>Arquero</posicion_habitual>
+            <club_origen>Aston Villa</club_origen>
+        </convocatoria>
+    </jugador>
+
+  
+    <jugador>
+        <pais_nacimiento_iso2>FR</pais_nacimiento_iso2>
+        <nombre>Kylian</nombre>
+        <apellido>Mbappé</apellido>
+        <fecha_nacimiento>1998-12-20</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_03</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>FR</seleccion_iso2>
+            <dorsal>10</dorsal>
+            <posicion_habitual>Delantero</posicion_habitual>
+            <club_origen>Real Madrid</club_origen>
+        </convocatoria>
+    </jugador>
+    <!--duplicado -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Lionel Andrés</nombre>
+        <apellido>Messi</apellido>
+        <fecha_nacimiento>1987-06-24</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_01</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>10</dorsal>
+            <posicion_habitual>Delantero</posicion_habitual>
+            <club_origen>Inter Miami CF (Actualizado)</club_origen>
+        </convocatoria>
+    </jugador>
+   
+    <!-- Casos invalidos                        -->
+    
+
+    <!--  País de nacimiento que no existe en la base (ISO2 = 'ZZ') -->
+    <jugador>
+        <pais_nacimiento_iso2>ZZ</pais_nacimiento_iso2>
+        <nombre>Juan</nombre>
+        <apellido>Inexistente</apellido>
+        <fecha_nacimiento>2000-01-01</fecha_nacimiento>
+        <documento_identidad>DOC_XML_ERR_01</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>15</dorsal>
+            <posicion_habitual>Mediocampista</posicion_habitual>
+            <club_origen>Club Test</club_origen>
+        </convocatoria>
+    </jugador>
+
+    <!-- Fecha de nacimiento futura (Año 2035) -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Futuro</nombre>
+        <apellido>Jugador</apellido>
+        <fecha_nacimiento>2035-05-10</fecha_nacimiento>
+        <documento_identidad>DOC_XML_ERR_02</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>16</dorsal>
+            <posicion_habitual>Defensor</posicion_habitual>
+            <club_origen>Club Test</club_origen>
+        </convocatoria>
+    </jugador>
+
+    <!-- casos invalidos en convocatoria                    -->
+
+
+    <!--Dorsal fuera de rango  -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Julian</nombre>
+        <apellido>Álvarez</apellido>
+        <fecha_nacimiento>2000-01-31</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_04</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>150</dorsal>
+            <posicion_habitual>Delantero</posicion_habitual>
+            <club_origen>Atlético de Madrid</club_origen>
+        </convocatoria>
+    </jugador>
+
+    <!-- Dorsal duplicado en la misma selección (Intenta usar el #10 que ya tiene Messi) -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Alexis</nombre>
+        <apellido>Mac Allister</apellido>
+        <fecha_nacimiento>1998-12-24</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_05</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>10</dorsal>
+            <posicion_habitual>Mediocampista</posicion_habitual>
+            <club_origen>Liverpool FC</club_origen>
+        </convocatoria>
+    </jugador>
+
+    <!--  Posición habitual inválida (no es Arquero/Defensor/Mediocampista/Delantero) -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Rodrigo</nombre>
+        <apellido>De Paul</apellido>
+        <fecha_nacimiento>1994-05-24</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_06</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>7</dorsal>
+            <posicion_habitual>Enganche Magico</posicion_habitual>
+            <club_origen>Atlético de Madrid</club_origen>
+        </convocatoria>
+    </jugador>
+
+    <!--  Club de origen nulo/vacío -->
+    <jugador>
+        <pais_nacimiento_iso2>AR</pais_nacimiento_iso2>
+        <nombre>Cristian</nombre>
+        <apellido>Romero</apellido>
+        <fecha_nacimiento>1998-04-27</fecha_nacimiento>
+        <documento_identidad>DOC_XML_2026_07</documento_identidad>
+        <convocatoria>
+            <seleccion_iso2>AR</seleccion_iso2>
+            <dorsal>13</dorsal>
+            <posicion_habitual>Defensor</posicion_habitual>
+            <club_origen></club_origen>
+        </convocatoria>
+    </jugador>
+
+</jugadores>

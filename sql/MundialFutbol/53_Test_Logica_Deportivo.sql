@@ -292,7 +292,7 @@ END CATCH;
 PRINT '';
 
 
-PRINT '  7. PRUEBA VALIDACIÓN: Exceder las 3 ventanas de cambios en juego';
+PRINT '  7.  Exceder las 3 ventanas de cambios en juego';
 
 SAVE TRANSACTION Test_Ventanas;
 BEGIN TRY
@@ -317,7 +317,7 @@ END CATCH;
 PRINT '';
 
 
-PRINT '  8. PRUEBA VALIDACIÓN: Intentar superar el máximo de 5 cambios';
+PRINT '  8.  Intentar superar el máximo de 5 cambios';
 
 SAVE TRANSACTION Test_MaxCambios;
 BEGIN TRY
@@ -352,28 +352,73 @@ END CATCH;
 PRINT '';
 
 
-
-PRINT '  9.  Registrar Roja Directa a Schiavi y Cálculo de Sanción';
-
+PRINT '9. Expulsión por Doble Amarilla y Suspensión Automática';
 BEGIN TRY
-    -- Se sanciona al Flaco Schiavi (@c3) con Roja Directa por corte táctico
+    -- 1ª Tarjeta Amarilla a Schiavi (@c3) en el minuto 30
     EXEC deportivo.usp_RegistrarTarjetaYCalcularSancion
         @id_partido = @id_partido,
         @id_convocatoria = @c3,
+        @minuto = 30,
+        @periodo = '1T',
+        @color = 'Amarilla',
+        @es_roja_directa = 0,
+        @motivo = 'Falta táctica';
+
+    PRINT 'OK - Primera tarjeta amarilla registrada.';
+
+    -- 2ª Tarjeta Amarilla al mismo jugador (@c3) en el minuto 75
+
+    EXEC deportivo.usp_RegistrarTarjetaYCalcularSancion
+        @id_partido = @id_partido,
+        @id_convocatoria = @c3,
+        @minuto = 75,
+        @periodo = '2T',
+        @color = 'Amarilla',
+        @es_roja_directa = 0,
+        @motivo = 'Mano intencionada / Reiteración de faltas';
+
+    PRINT 'OK - Segunda tarjeta amarilla registrada. Expulsión por Doble Amarilla efectuada.';
+
+    -- Se verán las 2 amarillas + la roja insertada automáticamente por el SP
+    SELECT t.id, j.nombre + ' ' + j.apellido AS jugador, t.minuto, t.periodo, t.color, t.es_roja_directa, t.motivo
+    FROM deportivo.Tarjeta t
+    JOIN deportivo.Convocatoria c ON t.id_convocatoria = c.id
+    JOIN deportivo.Jugador j ON c.id_jugador = j.id
+    WHERE t.id_convocatoria = @c3;
+
+    --  Sanción de 1 fecha generada en estado Pendiente
+    SELECT s.id, j.nombre + ' ' + j.apellido AS suspendido, s.cantidad_partidos_sancion, s.motivo, s.estado
+    FROM deportivo.Sancion s
+    JOIN deportivo.Convocatoria c ON s.id_convocatoria = c.id
+    JOIN deportivo.Jugador j ON c.id_jugador = j.id
+    WHERE s.id_convocatoria = @c3;
+
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+PRINT '';
+
+PRINT '  10.  Registrar Roja Directa  y Cálculo de Sanción';
+BEGIN TRY
+    -- Se sanciona a Riquelme / Convocado 10 (@c10) con Roja Directa para no interferir con @c3
+    EXEC deportivo.usp_RegistrarTarjetaYCalcularSancion
+        @id_partido = @id_partido,
+        @id_convocatoria = @c10,
         @minuto = 85,
         @periodo = '2T',
         @color = 'Roja',
         @es_roja_directa = 1,
-        @motivo = 'Falta grave como último recurso';
+        @motivo = 'Falta grave como último recurso / Conducta violenta';
 
-    PRINT 'OK - Tarjeta Roja y Sanción de 2 partidos generadas exitosamente.';
+    PRINT 'OK - Tarjeta Roja Directa y Sanción de 2 partidos generadas exitosamente.';
 
     -- Evidencia: Sanción generada en estado Pendiente
     SELECT s.id, j.nombre + ' ' + j.apellido AS expulsado, c.club_origen, s.cantidad_partidos_sancion, s.motivo, s.estado
     FROM deportivo.Sancion s
     JOIN deportivo.Convocatoria c ON s.id_convocatoria = c.id
     JOIN deportivo.Jugador j ON c.id_jugador = j.id
-    WHERE s.id_convocatoria = @c3;
+    WHERE s.id_convocatoria = @c10;
 END TRY
 BEGIN CATCH
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
@@ -382,7 +427,7 @@ PRINT '';
 
 
 
-PRINT '  10.  Intentar Formar con Jugador Suspendido';
+PRINT '  11.  Intentar Formar con Jugador Suspendido';
 
 SAVE TRANSACTION Test_Formacion;
 BEGIN TRY
@@ -406,7 +451,7 @@ BEGIN TRY
         @id_convocatoria_titular_7 = @c7,
         @id_convocatoria_titular_8 = @c8,
         @id_convocatoria_titular_9 = @c9,
-        @id_convocatoria_titular_10 = @c10,
+        @id_convocatoria_titular_10 = @c10,-- JUGADOR SUSPENDIDO (RIQUELME)
         @id_convocatoria_titular_11 = @c11;
 
     PRINT 'ERROR - El procedimiento debió rechazar al titular suspendido.';
@@ -419,7 +464,7 @@ BEGIN CATCH
 END CATCH;
 PRINT '';
 
-PRINT '  11. Registrar Gol con Jugador Inexistente';
+PRINT '  12. Registrar Gol con Jugador Inexistente';
 
 BEGIN TRY
     EXEC deportivo.usp_RegistrarGol
@@ -437,7 +482,7 @@ BEGIN CATCH
 END CATCH;
 PRINT '';
 
-PRINT '  12. Validar Plantilla Incompleta';
+PRINT '  13. Validar Plantilla Incompleta';
 
 SAVE TRANSACTION Test_PlantillaIncompleta;
 

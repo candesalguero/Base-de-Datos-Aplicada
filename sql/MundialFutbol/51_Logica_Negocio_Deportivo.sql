@@ -241,7 +241,7 @@ CREATE OR ALTER PROCEDURE deportivo.usp_RegistrarTarjetaYCalcularSancion
     @minuto tinyint,
     @periodo char(3),
     @color varchar(10),
-    @es_roja_directa bit,
+    @es_roja_directa bit = 0,
     @motivo varchar(100)
 AS
 BEGIN
@@ -273,6 +273,7 @@ BEGIN
 
         IF @errores <> N'' THROW 50000, @errores, 1;
 
+        -- 1. Insertar la tarjeta que saca el árbitro (Amarilla o Roja directa)
         DECLARE @id_tarjeta int;
         EXEC deportivo.usp_Tarjeta_Insertar
             @id_partido = @id_partido,
@@ -285,36 +286,76 @@ BEGIN
             @motivo = @motivo,
             @id_tarjeta = @id_tarjeta OUTPUT;
 
-        IF @color = 'Roja'
+       --caso A: roja directa
+        IF @color = 'Roja' AND @es_roja_directa = 1
         BEGIN
-            DECLARE @fechas_roja tinyint = CASE WHEN @es_roja_directa = 1 THEN 2 ELSE 1 END;
-
             EXEC deportivo.usp_Sancion_Insertar
                 @id_convocatoria = @id_convocatoria,
                 @id_miembro_cuerpo_tecnico = @id_miembro_cuerpo_tecnico,
                 @id_partido_origen = @id_partido,
                 @id_tarjeta = @id_tarjeta,
-                @cantidad_partidos_sancion = @fechas_roja,
-                @motivo = 'Expulsión en partido',
+                @cantidad_partidos_sancion = 2, -- Roja Directa = 2 fechas
+                @motivo = 'Expulsión directa en partido',
                 @estado = 'Pendiente';
         END
+        --caso B: amarilla
         ELSE IF @color = 'Amarilla' AND @id_convocatoria IS NOT NULL
         BEGIN
-            DECLARE @cant_amarillas int;
-            SELECT @cant_amarillas = COUNT(*)
+            -- Evaluamos cuantas amarillas tiene EN ESTE MISMO PARTIDO
+            DECLARE @amarillas_en_partido int;
+            SELECT @amarillas_en_partido = COUNT(*)
             FROM deportivo.Tarjeta
-            WHERE id_convocatoria = @id_convocatoria AND color = 'Amarilla';
+            WHERE id_partido = @id_partido 
+              AND id_convocatoria = @id_convocatoria 
+              AND color = 'Amarilla';
 
-            IF @cant_amarillas % 2 = 0
+            -- caso B.1: doble amarilla en el mismo partido (Expulsión Automática)
+            IF @amarillas_en_partido = 2
             BEGIN
+                DECLARE @id_tarjeta_roja int;
+                
+                -- Insertar automáticamente la tarjeta Roja 
+                EXEC deportivo.usp_Tarjeta_Insertar
+                    @id_partido = @id_partido,
+                    @id_convocatoria = @id_convocatoria,
+                    @id_miembro_cuerpo_tecnico = NULL,
+                    @minuto = @minuto,
+                    @periodo = @periodo,
+                    @color = 'Roja',
+                    @es_roja_directa = 0, -- No es roja directa, es por doble amonestación
+                    @motivo = 'Expulsión por doble amonestación',
+                    @id_tarjeta = @id_tarjeta_roja OUTPUT;
+
+                -- Insertar la Sanción de 1 fecha por doble amarilla
                 EXEC deportivo.usp_Sancion_Insertar
                     @id_convocatoria = @id_convocatoria,
                     @id_miembro_cuerpo_tecnico = NULL,
                     @id_partido_origen = @id_partido,
-                    @id_tarjeta = @id_tarjeta,
-                    @cantidad_partidos_sancion = 1,
-                    @motivo = 'Acumulación de Tarjetas Amarillas',
+                    @id_tarjeta = @id_tarjeta_roja,
+                    @cantidad_partidos_sancion = 1, -- Doble amarilla = 1 fecha
+                    @motivo = 'Expulsión por doble amonestación',
                     @estado = 'Pendiente';
+            END
+            -- caso B.2:acumulacion de amarillas en partidos distintos
+            ELSE
+            BEGIN
+                DECLARE @cant_amarillas_totales int;
+                SELECT @cant_amarillas_totales = COUNT(*)
+                FROM deportivo.Tarjeta
+                WHERE id_convocatoria = @id_convocatoria AND color = 'Amarilla';
+
+                -- Cada 2 amarillas acumuladas en la competencia (y que no haya sido expulsado en este partido)
+                IF @cant_amarillas_totales % 2 = 0
+                BEGIN
+                    EXEC deportivo.usp_Sancion_Insertar
+                        @id_convocatoria = @id_convocatoria,
+                        @id_miembro_cuerpo_tecnico = NULL,
+                        @id_partido_origen = @id_partido,
+                        @id_tarjeta = @id_tarjeta,
+                        @cantidad_partidos_sancion = 1,
+                        @motivo = 'Acumulación de Tarjetas Amarillas en el torneo',
+                        @estado = 'Pendiente';
+                END
             END
         END
 
