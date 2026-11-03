@@ -1,4 +1,14 @@
 ﻿/*
+
+    Universidad: Universidad de La Matanza
+    Materia: Bases de Datos Aplicada
+    Integrantes:
+        - Salguero, Candela
+        - Ocaranza, Lucila
+        - Dimattia Damm, Malena
+        - Fuentes, Martina Alejandra
+
+    Fecha: Octubre 2026
     Objetivo:
     Probar la logica de negocio del esquema publicidad,
     contemplando operaciones atomicas, calculo de prime time,

@@ -243,257 +243,384 @@ BEGIN
 
 
     /* ============================================================
-       CURSOR SOBRE STAGING
-       ============================================================ */
+   PREPARAR REGISTROS A PROCESAR
+   ============================================================
 
-    DECLARE cur_partidos CURSOR LOCAL FAST_FORWARD FOR
+   Se utiliza una tabla auxiliar numerada para recorrer las filas
+   mediante un WHILE, evitando el uso de cursores.
+   ============================================================ */
 
-        SELECT
-            match_id,
-            stage_name,
-            match_date,
-            match_time,
-            stadium_name,
-            home_team_name,
-            away_team_name,
-            home_team_score,
-            away_team_score
-        FROM integracion.StagingPartidoCSV;
-
-
-    OPEN cur_partidos;
-
-
-    FETCH NEXT FROM cur_partidos INTO
-        @match_id,
-        @stage_name,
-        @match_date,
-        @match_time,
-        @stadium_name,
-        @home_team_name,
-        @away_team_name,
-        @home_team_score,
-        @away_team_score;
+DECLARE @partidos_a_procesar TABLE
+(
+    fila int IDENTITY(2,1) PRIMARY KEY,
+    match_id varchar(100),
+    stage_name nvarchar(100),
+    match_date varchar(50),
+    match_time varchar(50),
+    stadium_name nvarchar(200),
+    home_team_name nvarchar(150),
+    away_team_name nvarchar(150),
+    home_team_score varchar(20),
+    away_team_score varchar(20)
+);
 
 
-
-    WHILE @@FETCH_STATUS = 0
-    BEGIN
-
-        SET @fila = @fila + 1;
-
-        SET @error_fila = N'';
-
-        SET @id_sede = NULL;
-        SET @id_fase = NULL;
-
-        SET @id_local = NULL;
-        SET @id_visitante = NULL;
-
-        SET @fecha_local = NULL;
-        SET @fecha_utc = NULL;
-
-        SET @goles_local = NULL;
-        SET @goles_visitante = NULL;
-
-        SET @huso_horario = NULL;
-        SET @offset_horas = NULL;
-
-        SET @id_partido = NULL;
-
+INSERT INTO @partidos_a_procesar
+(
+    match_id,
+    stage_name,
+    match_date,
+    match_time,
+    stadium_name,
+    home_team_name,
+    away_team_name,
+    home_team_score,
+    away_team_score
+)
+SELECT
+    match_id,
+    stage_name,
+    match_date,
+    match_time,
+    stadium_name,
+    home_team_name,
+    away_team_name,
+    home_team_score,
+    away_team_score
+FROM integracion.StagingPartidoCSV;
 
 
-        /* ========================================================
-           SEDE
-           ======================================================== */
+/* ============================================================
+   RECORRER REGISTROS SIN CURSOR
+   ============================================================ */
 
-        SELECT TOP 1
-            @id_sede = id,
-            @huso_horario = huso_horario
-        FROM general.Sede
-        WHERE UPPER(LTRIM(RTRIM(nombre_estadio)))
-            = UPPER(LTRIM(RTRIM(@stadium_name)));
+DECLARE @fila_actual int = 2;
+DECLARE @ultima_fila int;
 
-
-        IF @id_sede IS NULL
-            SET @error_fila +=
-                N'- No existe la sede: '
-                + ISNULL(@stadium_name, 'NULL')
-                + N'. ';
+SELECT
+    @ultima_fila = MAX(fila)
+FROM @partidos_a_procesar;
 
 
-/* ========================================================
-   FASE
-   ======================================================== */
-
-SET @fase_normalizada =
-    CASE LOWER(LTRIM(RTRIM(@stage_name)))
-        WHEN 'group stage'       THEN 'grupos'
-        WHEN 'second group stage' THEN 'grupos'
-        WHEN 'round of 16'       THEN 'octavos'
-        WHEN 'quarter-final'     THEN 'cuartos'
-        WHEN 'quarter-finals'    THEN 'cuartos'
-        WHEN 'semi-final'        THEN 'semifinales'
-        WHEN 'semi-finals'       THEN 'semifinales'
-        WHEN 'third-place match' THEN 'tercer puesto'
-        WHEN 'final'             THEN 'final'
-        ELSE NULL
-    END;
-
-
-IF @fase_normalizada IS NULL
+WHILE @fila_actual <= ISNULL(@ultima_fila, 1)
 BEGIN
 
-    SET @error_fila +=
-        N'- La fase externa no tiene equivalencia: '
-        + ISNULL(@stage_name, 'NULL')
-        + N'. ';
+    /* Obtener registro actual */
 
-END
-ELSE
-BEGIN
+    SELECT
+        @match_id = match_id,
+        @stage_name = stage_name,
+        @match_date = match_date,
+        @match_time = match_time,
+        @stadium_name = stadium_name,
+        @home_team_name = home_team_name,
+        @away_team_name = away_team_name,
+        @home_team_score = home_team_score,
+        @away_team_score = away_team_score
+    FROM @partidos_a_procesar
+    WHERE fila = @fila_actual;
+
+
+    SET @fila = @fila_actual;
+
+    SET @error_fila = N'';
+
+    SET @id_sede = NULL;
+    SET @id_fase = NULL;
+
+    SET @id_local = NULL;
+    SET @id_visitante = NULL;
+
+    SET @fecha_local = NULL;
+    SET @fecha_utc = NULL;
+
+    SET @goles_local = NULL;
+    SET @goles_visitante = NULL;
+
+    SET @huso_horario = NULL;
+    SET @offset_horas = NULL;
+
+    SET @id_partido = NULL;
+
+
+    /* ========================================================
+       SEDE
+       ======================================================== */
 
     SELECT TOP 1
-        @id_fase = id
-    FROM general.Fase
-    WHERE LOWER(LTRIM(RTRIM(nombre)))
-        = LOWER(@fase_normalizada);
+        @id_sede = id,
+        @huso_horario = huso_horario
+    FROM general.Sede
+    WHERE UPPER(LTRIM(RTRIM(nombre_estadio)))
+        = UPPER(LTRIM(RTRIM(@stadium_name)));
 
 
-    IF @id_fase IS NULL
+    IF @id_sede IS NULL
         SET @error_fila +=
-            N'- No existe la fase en la base: '
-            + @fase_normalizada
+            N'- No existe la sede: '
+            + ISNULL(@stadium_name, 'NULL')
             + N'. ';
 
-END;
 
-        /* ========================================================
-           SELECCIÓN LOCAL
-           ======================================================== */
+    /* ========================================================
+       FASE
+       ======================================================== */
 
-        SELECT TOP 1
-            @id_local = id
-        FROM deportivo.Seleccion
-        WHERE UPPER(LTRIM(RTRIM(nombre)))
-            = UPPER(LTRIM(RTRIM(@home_team_name)));
-
-
-        IF @id_local IS NULL
-            SET @error_fila +=
-                N'- No existe la selección local: '
-                + ISNULL(@home_team_name, 'NULL')
-                + N'. ';
-
-
-
-        /* ========================================================
-           SELECCIÓN VISITANTE
-           ======================================================== */
-
-        SELECT TOP 1
-            @id_visitante = id
-        FROM deportivo.Seleccion
-        WHERE UPPER(LTRIM(RTRIM(nombre)))
-            = UPPER(LTRIM(RTRIM(@away_team_name)));
-
-
-        IF @id_visitante IS NULL
-            SET @error_fila +=
-                N'- No existe la selección visitante: '
-                + ISNULL(@away_team_name, 'NULL')
-                + N'. ';
-
-
-
-        /* ========================================================
-           FECHA Y HORA
-           ======================================================== */
-
-        SET @fecha_local =
-            TRY_CONVERT(
-                datetime,
-                CONCAT(
-                    LTRIM(RTRIM(@match_date)),
-                    ' ',
-                    LTRIM(RTRIM(@match_time))
-                )
-            );
-
-
-        IF @fecha_local IS NULL
-            SET @error_fila +=
-                N'- Fecha u hora inválida. ';
-
-
-
-        /* ========================================================
-           GOLES
-           ======================================================== */
-
-        SET @goles_local =
-            TRY_CONVERT(tinyint, @home_team_score);
-
-
-        SET @goles_visitante =
-            TRY_CONVERT(tinyint, @away_team_score);
-
-
-        IF @goles_local IS NULL
-            SET @error_fila +=
-                N'- Cantidad de goles local inválida. ';
-
-
-        IF @goles_visitante IS NULL
-            SET @error_fila +=
-                N'- Cantidad de goles visitante inválida. ';
-
-
-
-        /* ========================================================
-           CONVERTIR HORA LOCAL A UTC
-           ======================================================== */
-
-        IF @huso_horario IS NOT NULL
-        BEGIN
-
-            IF UPPER(@huso_horario) = 'UTC'
-                SET @offset_horas = 0;
-
-            ELSE
-                SET @offset_horas =
-                    TRY_CONVERT(
-                        int,
-                        REPLACE(
-                            UPPER(@huso_horario),
-                            'UTC',
-                            ''
-                        )
-                    );
-
-
-            IF @offset_horas IS NULL
-                SET @error_fila +=
-                    N'- Huso horario inválido para la sede. ';
-
-            ELSE IF @fecha_local IS NOT NULL
-                SET @fecha_utc =
-                    DATEADD(
-                        HOUR,
-                        -@offset_horas,
-                        @fecha_local
-                    );
-
+    SET @fase_normalizada =
+        CASE LOWER(LTRIM(RTRIM(@stage_name)))
+            WHEN 'group stage'        THEN 'grupos'
+            WHEN 'second group stage' THEN 'grupos'
+            WHEN 'round of 16'        THEN 'octavos'
+            WHEN 'quarter-final'      THEN 'cuartos'
+            WHEN 'quarter-finals'     THEN 'cuartos'
+            WHEN 'semi-final'         THEN 'semifinales'
+            WHEN 'semi-finals'        THEN 'semifinales'
+            WHEN 'third-place match'  THEN 'tercer puesto'
+            WHEN 'final'              THEN 'final'
+            ELSE NULL
         END;
 
 
+    IF @fase_normalizada IS NULL
+    BEGIN
 
-        /* ========================================================
-           SI LA FILA TIENE ERRORES
-           ======================================================== */
+        SET @error_fila +=
+            N'- La fase externa no tiene equivalencia: '
+            + ISNULL(@stage_name, 'NULL')
+            + N'. ';
 
-        IF @error_fila <> N''
-        BEGIN
+    END
+    ELSE
+    BEGIN
+
+        SELECT TOP 1
+            @id_fase = id
+        FROM general.Fase
+        WHERE LOWER(LTRIM(RTRIM(nombre)))
+            = LOWER(@fase_normalizada);
+
+
+        IF @id_fase IS NULL
+            SET @error_fila +=
+                N'- No existe la fase en la base: '
+                + @fase_normalizada
+                + N'. ';
+
+    END;
+
+
+    /* ========================================================
+       SELECCION LOCAL
+       ======================================================== */
+
+    SELECT TOP 1
+        @id_local = id
+    FROM deportivo.Seleccion
+    WHERE UPPER(LTRIM(RTRIM(nombre)))
+        = UPPER(LTRIM(RTRIM(@home_team_name)));
+
+
+    IF @id_local IS NULL
+        SET @error_fila +=
+            N'- No existe la selección local: '
+            + ISNULL(@home_team_name, 'NULL')
+            + N'. ';
+
+
+    /* ========================================================
+       SELECCION VISITANTE
+       ======================================================== */
+
+    SELECT TOP 1
+        @id_visitante = id
+    FROM deportivo.Seleccion
+    WHERE UPPER(LTRIM(RTRIM(nombre)))
+        = UPPER(LTRIM(RTRIM(@away_team_name)));
+
+
+    IF @id_visitante IS NULL
+        SET @error_fila +=
+            N'- No existe la selección visitante: '
+            + ISNULL(@away_team_name, 'NULL')
+            + N'. ';
+
+
+    /* ========================================================
+       FECHA Y HORA
+       ======================================================== */
+
+    SET @fecha_local =
+        TRY_CONVERT(
+            datetime,
+            CONCAT(
+                LTRIM(RTRIM(@match_date)),
+                ' ',
+                LTRIM(RTRIM(@match_time))
+            )
+        );
+
+
+    IF @fecha_local IS NULL
+        SET @error_fila +=
+            N'- Fecha u hora inválida. ';
+
+
+    /* ========================================================
+       GOLES
+       ======================================================== */
+
+    SET @goles_local =
+        TRY_CONVERT(tinyint, @home_team_score);
+
+    SET @goles_visitante =
+        TRY_CONVERT(tinyint, @away_team_score);
+
+
+    IF @goles_local IS NULL
+        SET @error_fila +=
+            N'- Cantidad de goles local inválida. ';
+
+
+    IF @goles_visitante IS NULL
+        SET @error_fila +=
+            N'- Cantidad de goles visitante inválida. ';
+
+
+    /* ========================================================
+       CONVERTIR HORA LOCAL A UTC
+       ======================================================== */
+
+    IF @huso_horario IS NOT NULL
+    BEGIN
+
+        IF UPPER(@huso_horario) = 'UTC'
+            SET @offset_horas = 0;
+
+        ELSE
+            SET @offset_horas =
+                TRY_CONVERT(
+                    int,
+                    REPLACE(
+                        UPPER(@huso_horario),
+                        'UTC',
+                        ''
+                    )
+                );
+
+
+        IF @offset_horas IS NULL
+            SET @error_fila +=
+                N'- Huso horario inválido para la sede. ';
+
+        ELSE IF @fecha_local IS NOT NULL
+            SET @fecha_utc =
+                DATEADD(
+                    HOUR,
+                    -@offset_horas,
+                    @fecha_local
+                );
+
+    END;
+
+
+    /* ========================================================
+       FILA CON ERRORES
+       ======================================================== */
+
+    IF @error_fila <> N''
+    BEGIN
+
+        INSERT INTO @errores_importacion
+        (
+            id,
+            fila,
+            error
+        )
+        VALUES
+        (
+            @next_error_id,
+            @fila,
+            LEFT(@error_fila, 500)
+        );
+
+
+        SET @next_error_id =
+            @next_error_id + 1;
+
+    END
+
+    ELSE
+    BEGIN
+
+        /* ====================================================
+           UPSERT
+           ==================================================== */
+
+        BEGIN TRY
+
+            SELECT TOP 1
+                @id_partido = id
+            FROM deportivo.Partido
+            WHERE id_seleccion_local = @id_local
+              AND id_seleccion_visitante = @id_visitante
+              AND fecha_hora_local = @fecha_local;
+
+
+            /* =========================
+               UPDATE
+               ========================= */
+
+            IF @id_partido IS NOT NULL
+            BEGIN
+
+                EXEC deportivo.usp_Partido_Actualizar
+                    @id = @id_partido,
+                    @id_sede = @id_sede,
+                    @id_fase = @id_fase,
+                    @id_seleccion_local = @id_local,
+                    @id_seleccion_visitante = @id_visitante,
+                    @fecha_hora_local = @fecha_local,
+                    @fecha_hora_utc = @fecha_utc,
+                    @goles_local = @goles_local,
+                    @goles_visitante = @goles_visitante,
+                    @asistencia_publico = NULL;
+
+
+                SET @actualizados =
+                    @actualizados + 1;
+
+            END
+
+            /* =========================
+               INSERT
+               ========================= */
+
+            ELSE
+            BEGIN
+
+                DECLARE @nuevo_id_partido int;
+
+
+                EXEC deportivo.usp_Partido_Insertar
+                    @id_sede = @id_sede,
+                    @id_fase = @id_fase,
+                    @id_seleccion_local = @id_local,
+                    @id_seleccion_visitante = @id_visitante,
+                    @fecha_hora_local = @fecha_local,
+                    @fecha_hora_utc = @fecha_utc,
+                    @goles_local = @goles_local,
+                    @goles_visitante = @goles_visitante,
+                    @asistencia_publico = NULL,
+                    @id_partido = @nuevo_id_partido OUTPUT;
+
+
+                SET @insertados =
+                    @insertados + 1;
+
+            END;
+
+        END TRY
+        BEGIN CATCH
 
             INSERT INTO @errores_importacion
             (
@@ -505,138 +632,24 @@ END;
             (
                 @next_error_id,
                 @fila,
-                LEFT(@error_fila, 500)
+                LEFT(ERROR_MESSAGE(), 500)
             );
 
 
-            SET @next_error_id = @next_error_id + 1;
+            SET @next_error_id =
+                @next_error_id + 1;
 
-        END
-
-        ELSE
-        BEGIN
-
-            /* ====================================================
-               UPSERT
-               ==================================================== */
-
-            BEGIN TRY
-
-                /*
-                    Buscamos si el partido ya existe.
-
-                    La combinación usada es:
-                    - selección local
-                    - selección visitante
-                    - fecha/hora local
-                */
-
-                SELECT TOP 1
-                    @id_partido = id
-                FROM deportivo.Partido
-                WHERE id_seleccion_local = @id_local
-                  AND id_seleccion_visitante = @id_visitante
-                  AND fecha_hora_local = @fecha_local;
-
-
-
-                /* =========================
-                   UPDATE
-                   ========================= */
-
-                IF @id_partido IS NOT NULL
-                BEGIN
-
-                    EXEC deportivo.usp_Partido_Actualizar
-                        @id = @id_partido,
-                        @id_sede = @id_sede,
-                        @id_fase = @id_fase,
-                        @id_seleccion_local = @id_local,
-                        @id_seleccion_visitante = @id_visitante,
-                        @fecha_hora_local = @fecha_local,
-                        @fecha_hora_utc = @fecha_utc,
-                        @goles_local = @goles_local,
-                        @goles_visitante = @goles_visitante,
-                        @asistencia_publico = NULL;
-
-
-                    SET @actualizados =
-                        @actualizados + 1;
-
-                END
-
-
-                /* =========================
-                   INSERT
-                   ========================= */
-
-                ELSE
-                BEGIN
-
-                    DECLARE @nuevo_id_partido int;
-
-
-                    EXEC deportivo.usp_Partido_Insertar
-                        @id_sede = @id_sede,
-                        @id_fase = @id_fase,
-                        @id_seleccion_local = @id_local,
-                        @id_seleccion_visitante = @id_visitante,
-                        @fecha_hora_local = @fecha_local,
-                        @fecha_hora_utc = @fecha_utc,
-                        @goles_local = @goles_local,
-                        @goles_visitante = @goles_visitante,
-                        @asistencia_publico = NULL,
-                        @id_partido = @nuevo_id_partido OUTPUT;
-
-
-                    SET @insertados =
-                        @insertados + 1;
-
-                END;
-
-            END TRY
-            BEGIN CATCH
-
-                INSERT INTO @errores_importacion
-                (
-                    id,
-                    fila,
-                    error
-                )
-                VALUES
-                (
-                    @next_error_id,
-                    @fila,
-                    LEFT(ERROR_MESSAGE(), 500)
-                );
-
-
-                SET @next_error_id =
-                    @next_error_id + 1;
-
-            END CATCH;
-
-        END;
-
-
-
-        FETCH NEXT FROM cur_partidos INTO
-            @match_id,
-            @stage_name,
-            @match_date,
-            @match_time,
-            @stadium_name,
-            @home_team_name,
-            @away_team_name,
-            @home_team_score,
-            @away_team_score;
+        END CATCH;
 
     END;
 
 
+    /* Pasar a la siguiente fila */
 
-    CLOSE cur_partidos;
-    DEALLOCATE cur_partidos;
+    SET @fila_actual =
+        @fila_actual + 1;
+
+END;
 
 
 

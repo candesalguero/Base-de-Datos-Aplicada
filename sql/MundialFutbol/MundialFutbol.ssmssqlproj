@@ -35,17 +35,17 @@
     </LogicalFolder>
     <LogicalFolder Name="Consultas" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="00_CrearBaseDatos.sql">
+        <FileNode Name="00_Drop_Database.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>00_CrearBaseDatos.sql</FullPath>
+          <FullPath>00_Drop_Database.sql</FullPath>
         </FileNode>
-        <FileNode Name="01_Drop_Database.sql.sql">
+        <FileNode Name="01_CrearBaseDatos.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>01_Drop_Database.sql.sql</FullPath>
+          <FullPath>01_CrearBaseDatos.sql</FullPath>
         </FileNode>
         <FileNode Name="02_CrearEsquemas.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>

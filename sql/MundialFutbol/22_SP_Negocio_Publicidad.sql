@@ -1,4 +1,14 @@
 /*
+    Universidad: Universidad de La Matanza
+    Materia: Bases de Datos Aplicada
+    Integrantes:
+        - Salguero, Candela
+        - Ocaranza, Lucila
+        - Dimattia Damm, Malena
+        - Fuentes, Martina Alejandra
+
+    Fecha: Octubre 2026
+
     Objetivo:
     Coordinar operaciones transaccionales del esquema publicidad.
     Las operaciones delegan validaciones al ABM y revierten todos los
