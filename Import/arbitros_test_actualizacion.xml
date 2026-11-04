@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<arbitros>
+    <arbitro>
+        <nombre>Carlos</nombre>
+        <apellido>Garcia</apellido>
+        <pais_iso2>AR</pais_iso2>
+        <categoria>Elite</categoria>
+    </arbitro>
+</arbitros>

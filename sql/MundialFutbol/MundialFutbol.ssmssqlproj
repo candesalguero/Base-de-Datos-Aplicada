@@ -215,6 +215,24 @@
           <AssociatedConnUserName />
           <FullPath>62_Test_Importar_Partidos_CSV.sql</FullPath>
         </FileNode>
+        <FileNode Name="66_Tablas_Staging_Arbitros_XML.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>66_Tablas_Staging_Arbitros_XML.sql</FullPath>
+        </FileNode>
+        <FileNode Name="67_SP_Importar_Arbitros_XML.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>67_SP_Importar_Arbitros_XML.sql</FullPath>
+        </FileNode>
+        <FileNode Name="68_Test_Importar_Arbitros_XML.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>68_Test_Importar_Arbitros_XML.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Varios" Type="3" Sorted="true">
