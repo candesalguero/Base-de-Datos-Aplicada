@@ -425,6 +425,201 @@ BEGIN
 END 
 GO 
 
+CREATE OR ALTER PROCEDURE general.usp_TipoCambio_Insertar
+    @id_moneda_origen int,
+    @id_moneda_destino int,
+    @fecha date,
+    @tipo_cambio decimal(18,6)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @id int;
+    DECLARE @Errores nvarchar(2048) = N'';
+
+    SELECT @id = ISNULL(MAX(id), 0) + 1
+    FROM general.TipoCambio;
+
+    IF @id_moneda_origen IS NULL
+        SET @Errores += N'- La moneda de origen es obligatoria. ';
+
+    IF @id_moneda_destino IS NULL
+        SET @Errores += N'- La moneda de destino es obligatoria. ';
+
+    IF @id_moneda_origen IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.Moneda
+           WHERE id = @id_moneda_origen
+       )
+        SET @Errores += N'- La moneda de origen no existe. ';
+
+    IF @id_moneda_destino IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.Moneda
+           WHERE id = @id_moneda_destino
+       )
+        SET @Errores += N'- La moneda de destino no existe. ';
+
+    IF @id_moneda_origen = @id_moneda_destino
+        SET @Errores += N'- La moneda de origen y destino no pueden ser iguales. ';
+
+    IF @fecha IS NULL
+        SET @Errores += N'- La fecha es obligatoria. ';
+
+    IF @tipo_cambio IS NULL OR @tipo_cambio <= 0
+        SET @Errores += N'- El tipo de cambio debe ser mayor a cero. ';
+
+    IF @fecha IS NOT NULL
+       AND @id_moneda_origen IS NOT NULL
+       AND @id_moneda_destino IS NOT NULL
+       AND EXISTS
+       (
+           SELECT 1
+           FROM general.TipoCambio
+           WHERE id_moneda_origen = @id_moneda_origen
+             AND id_moneda_destino = @id_moneda_destino
+             AND fecha = @fecha
+       )
+        SET @Errores += N'- Ya existe un tipo de cambio para esas monedas y fecha. ';
+
+    IF LEN(@Errores) > 0
+        THROW 50000, @Errores, 1;
+
+    INSERT INTO general.TipoCambio
+    (
+        id,
+        id_moneda_origen,
+        id_moneda_destino,
+        fecha,
+        tipo_cambio
+    )
+    VALUES
+    (
+        @id,
+        @id_moneda_origen,
+        @id_moneda_destino,
+        @fecha,
+        @tipo_cambio
+    );
+END
+GO
+
+CREATE OR ALTER PROCEDURE general.usp_TipoCambio_Actualizar
+    @id int,
+    @id_moneda_origen int,
+    @id_moneda_destino int,
+    @fecha date,
+    @tipo_cambio decimal(18,6)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @Errores nvarchar(2048) = N'';
+
+    IF @id IS NULL
+        SET @Errores += N'- El id del tipo de cambio es obligatorio. ';
+
+    IF @id IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.TipoCambio
+           WHERE id = @id
+       )
+        SET @Errores += N'- El id del tipo de cambio ingresado no existe. ';
+
+    IF @id_moneda_origen IS NULL
+        SET @Errores += N'- La moneda de origen es obligatoria. ';
+
+    IF @id_moneda_destino IS NULL
+        SET @Errores += N'- La moneda de destino es obligatoria. ';
+
+    IF @id_moneda_origen IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.Moneda
+           WHERE id = @id_moneda_origen
+       )
+        SET @Errores += N'- La moneda de origen no existe. ';
+
+    IF @id_moneda_destino IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.Moneda
+           WHERE id = @id_moneda_destino
+       )
+        SET @Errores += N'- La moneda de destino no existe. ';
+
+    IF @id_moneda_origen = @id_moneda_destino
+        SET @Errores += N'- La moneda de origen y destino no pueden ser iguales. ';
+
+    IF @fecha IS NULL
+        SET @Errores += N'- La fecha es obligatoria. ';
+
+    IF @tipo_cambio IS NULL OR @tipo_cambio <= 0
+        SET @Errores += N'- El tipo de cambio debe ser mayor a cero. ';
+
+    IF @id IS NOT NULL
+       AND @fecha IS NOT NULL
+       AND @id_moneda_origen IS NOT NULL
+       AND @id_moneda_destino IS NOT NULL
+       AND EXISTS
+       (
+           SELECT 1
+           FROM general.TipoCambio
+           WHERE id_moneda_origen = @id_moneda_origen
+             AND id_moneda_destino = @id_moneda_destino
+             AND fecha = @fecha
+             AND id <> @id
+       )
+        SET @Errores += N'- Ya existe un tipo de cambio para esas monedas y fecha. ';
+
+    IF LEN(@Errores) > 0
+        THROW 50000, @Errores, 1;
+
+    UPDATE general.TipoCambio
+    SET id_moneda_origen = @id_moneda_origen,
+        id_moneda_destino = @id_moneda_destino,
+        fecha = @fecha,
+        tipo_cambio = @tipo_cambio
+    WHERE id = @id;
+END
+GO
+
+CREATE OR ALTER PROCEDURE general.usp_TipoCambio_Eliminar
+    @id int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @Errores nvarchar(2048) = N'';
+
+    IF @id IS NULL
+        SET @Errores += N'- El id del tipo de cambio es obligatorio. ';
+
+    IF @id IS NOT NULL
+       AND NOT EXISTS
+       (
+           SELECT 1
+           FROM general.TipoCambio
+           WHERE id = @id
+       )
+        SET @Errores += N'- El id del tipo de cambio ingresado no existe. ';
+
+    IF LEN(@Errores) > 0
+        THROW 50000, @Errores, 1;
+
+    DELETE FROM general.TipoCambio
+    WHERE id = @id;
+END
+GO
+
 CREATE OR ALTER PROCEDURE general.usp_Fase_Insertar
 @nombre varchar(30)
 AS

@@ -69,6 +69,38 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS
+(
+    SELECT *
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA = 'general'
+      AND TABLE_NAME = 'TipoCambio'
+)
+BEGIN
+    CREATE TABLE general.TipoCambio
+    (
+        id int PRIMARY KEY,
+        id_moneda_origen int NOT NULL,
+        id_moneda_destino int NOT NULL,
+        fecha date NOT NULL,
+        tipo_cambio decimal(18,6) NOT NULL,
+
+        CONSTRAINT FK_TipoCambio_MonedaOrigen
+            FOREIGN KEY (id_moneda_origen)
+            REFERENCES general.Moneda(id),
+
+        CONSTRAINT FK_TipoCambio_MonedaDestino
+            FOREIGN KEY (id_moneda_destino)
+            REFERENCES general.Moneda(id),
+
+        CONSTRAINT CK_TipoCambio_Valor
+            CHECK (tipo_cambio > 0),
+
+        CONSTRAINT UQ_TipoCambio
+            UNIQUE (id_moneda_origen, id_moneda_destino, fecha)
+    )
+END
+
 IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA='general'
 AND TABLE_NAME='Fase')
