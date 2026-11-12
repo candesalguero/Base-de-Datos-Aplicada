@@ -108,45 +108,6 @@ BEGIN TRY
     DECLARE @id_mxn int = (SELECT id FROM general.Moneda WHERE cod_iso3 = 'MXN');
     DECLARE @id_gbp int = (SELECT id FROM general.Moneda WHERE cod_iso3 = 'GBP');
 
-    -- 1.5 Tipos de Cambio (para reportes de conversión de moneda)
-    DECLARE @next_tc_id int = ISNULL((SELECT MAX(id) FROM general.TipoCambio), 0) + 1;
-
-    IF NOT EXISTS (SELECT 1 FROM general.TipoCambio WHERE id_moneda_origen = @id_eur AND id_moneda_destino = @id_usd AND fecha = '2026-11-10')
-    BEGIN
-        INSERT INTO general.TipoCambio (id, id_moneda_origen, id_moneda_destino, fecha, tipo_cambio)
-        VALUES
-            (@next_tc_id,     @id_eur, @id_usd, '2026-11-10', 1.095000),
-            (@next_tc_id + 1, @id_usd, @id_eur, '2026-11-10', 0.913242),
-            (@next_tc_id + 2, @id_usd, @id_ars, '2026-11-10', 1050.000000),
-            (@next_tc_id + 3, @id_ars, @id_usd, '2026-11-10', 0.000952),
-            (@next_tc_id + 4, @id_eur, @id_ars, '2026-11-10', 1149.750000),
-            (@next_tc_id + 5, @id_usd, @id_mxn, '2026-11-10', 19.850000),
-            (@next_tc_id + 6, @id_mxn, @id_usd, '2026-11-10', 0.050378),
-            (@next_tc_id + 7, @id_gbp, @id_usd, '2026-11-10', 1.285000);
-    END;
-
-    -- 1.6 Indicadores Económicos (PBI para priorización de mercados)
-    MERGE general.IndicadorEconomico AS T
-    USING (
-        SELECT p.id AS id_pais, 2025 AS anio, v.pbi, CAST('2026-11-01' AS date) AS fecha_actualizacion
-        FROM (VALUES
-            ('US', 28780000.00),
-            ('DE',  4590000.00),
-            ('JP',  4110000.00),
-            ('GB',  3500000.00),
-            ('FR',  3130000.00),
-            ('BR',  2330000.00),
-            ('MX',  2010000.00),
-            ('ES',  1650000.00),
-            ('AR',   640000.00),
-            ('QA',   220000.00)
-        ) AS v(iso2, pbi)
-        INNER JOIN general.Pais p ON p.ISO2 = v.iso2 COLLATE Latin1_General_CS_AI
-    ) AS S
-    ON T.id_pais = S.id_pais AND T.anio = S.anio
-    WHEN NOT MATCHED THEN
-        INSERT (anio, id_pais, pbi, fecha_actualizacion)
-        VALUES (S.anio, S.id_pais, S.pbi, S.fecha_actualizacion);
 
     -- 1.7 Fases del Torneo
     MERGE general.Fase AS T
@@ -154,7 +115,7 @@ BEGIN TRY
         (1, 'grupos',          1, 0),
         (2, 'octavos',         2, 1),
         (3, 'cuartos',         3, 1),
-        (4, 'semifinales',     4, 1),
+        (4, 'semifinal',     4, 1),
         (5, 'tercer_puesto',   5, 1),
         (6, 'final',           6, 1)
     ) AS S (id, nombre, orden, es_eliminacion_directa)
