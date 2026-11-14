@@ -233,6 +233,84 @@
           <AssociatedConnUserName />
           <FullPath>68_Test_Importar_Arbitros_XML.sql</FullPath>
         </FileNode>
+        <FileNode Name="70_Carga_Datos_Masiva.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>70_Carga_Datos_Masiva.sql</FullPath>
+        </FileNode>
+        <FileNode Name="70_Carga_Datos_Masiva_Corregido.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>70_Carga_Datos_Masiva_Corregido.sql</FullPath>
+        </FileNode>
+        <FileNode Name="71_FuenteDatos_API_Worldbank.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>71_FuenteDatos_API_Worldbank.sql</FullPath>
+        </FileNode>
+        <FileNode Name="71_FuenteDatos_API_Worldbank_Corregido.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>71_FuenteDatos_API_Worldbank_Corregido.sql</FullPath>
+        </FileNode>
+        <FileNode Name="72_SP_Importar_IndicadoresAPI.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>72_SP_Importar_IndicadoresAPI.sql</FullPath>
+        </FileNode>
+        <FileNode Name="73_FuenteDatos_API_Frankfurter.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>73_FuenteDatos_API_Frankfurter.sql</FullPath>
+        </FileNode>
+        <FileNode Name="73_FuenteDatos_API_Frankfurter_Corregido.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>73_FuenteDatos_API_Frankfurter_Corregido.sql</FullPath>
+        </FileNode>
+        <FileNode Name="74_CargarMonedas_API_Frankfurter.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>74_CargarMonedas_API_Frankfurter.sql</FullPath>
+        </FileNode>
+        <FileNode Name="75_SP_ImportarTipoCambioAPI.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>75_SP_ImportarTipoCambioAPI.sql</FullPath>
+        </FileNode>
+        <FileNode Name="76_Test_API_WorldBank.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>76_Test_API_WorldBank.sql</FullPath>
+        </FileNode>
+        <FileNode Name="76_Test_API_Worldbank_Corregido.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>76_Test_API_Worldbank_Corregido.sql</FullPath>
+        </FileNode>
+        <FileNode Name="77_Test_API_Frankfurter.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>77_Test_API_Frankfurter.sql</FullPath>
+        </FileNode>
+        <FileNode Name="79_Validar_Carga_Final.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>79_Validar_Carga_Final.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Varios" Type="3" Sorted="true">

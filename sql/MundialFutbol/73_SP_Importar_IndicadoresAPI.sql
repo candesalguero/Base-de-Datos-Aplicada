@@ -69,7 +69,16 @@ BEGIN
         @pbi decimal(18,2),
         @registros_correctos int = 0,
         @proximo_id_error int,
-        @id_log int;
+        @id_log int,
+        @id_fuente int;
+
+    -- Buscar la fuente del Banco Mundial
+    SELECT @id_fuente = id
+    FROM integracion.FuenteDatos
+    WHERE nombre = 'World Bank - GDP per capita';
+
+    IF @id_fuente IS NULL
+        THROW 50000, 'No se encuentra registrada la fuente World Bank.', 1;
 
     -- Obtener el próximo ID para el log
     SELECT @id_log =
@@ -160,10 +169,10 @@ BEGIN
 
     EXEC integracion.usp_RegistrarResultadoImportacion
         @id_log = @id_log,
-        @id_fuente = 6200,
+        @id_fuente = @id_fuente,
         @archivo = @archivo,
         @registros_correctos = @registros_correctos,
         @errores_xml = @errores_xml;
 
 END;
-
+GO
