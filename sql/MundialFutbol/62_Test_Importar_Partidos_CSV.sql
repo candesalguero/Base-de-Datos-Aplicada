@@ -61,7 +61,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Confederacion_Insertar
+    EXEC general.usp_Confederacion_Insertar
         @nombre = 'AFC';
 
 END;
@@ -74,7 +74,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Confederacion_Insertar
+    EXEC general.usp_Confederacion_Insertar
         @nombre = 'CONMEBOL';
 
 END;
@@ -87,7 +87,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Confederacion_Insertar
+    EXEC general.usp_Confederacion_Insertar
         @nombre = 'CONCACAF';
 
 END;
@@ -128,7 +128,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Pais_Insertar
+    EXEC general.usp_Pais_Insertar
         @nombre = 'Qatar',
         @h_horario = 'UTC+3',
         @confederacion = @id_afc,
@@ -144,7 +144,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Pais_Insertar
+    EXEC general.usp_Pais_Insertar
         @nombre = 'Argentina',
         @h_horario = 'UTC-3',
         @confederacion = @id_conmebol,
@@ -160,7 +160,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Pais_Insertar
+    EXEC general.usp_Pais_Insertar
         @nombre = 'Mexico',
         @h_horario = 'UTC-6',
         @confederacion = @id_concacaf,
@@ -204,7 +204,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Fase_Insertar
+    EXEC general.usp_Fase_Insertar
         @nombre = 'grupos';
 
 END;
@@ -222,7 +222,7 @@ IF NOT EXISTS (
 )
 BEGIN
 
-    EXEC general.sp_Sede_Insertar
+    EXEC general.usp_Sede_Insertar
         @id_pais = @id_qatar,
         @nombre = 'Lusail Stadium',
         @ciudad = 'Lusail',
