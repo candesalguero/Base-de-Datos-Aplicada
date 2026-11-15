@@ -9,24 +9,41 @@
 
     Fecha: Noviembre 2026
 
-    Objetivo: registrar la API del Banco Mundial como una fuente de datos externa en integracion.FuenteDatos.
+    Objetivo:
+    Registrar la API del Banco Mundial como fuente de datos externa
+    en integracion.FuenteDatos.
 */
-    
 
-USE MundialFutbol
+USE MundialFutbol;
+GO
 
-IF NOT EXISTS (
+IF NOT EXISTS
+(
     SELECT 1
     FROM integracion.FuenteDatos
-    WHERE id = 6200
+    WHERE nombre = 'World Bank - GDP per capita'
 )
 BEGIN
-    INSERT INTO integracion.FuenteDatos
-        (id, nombre, tipo, url)
-    VALUES
-        (6200,
-         'World Bank - GDP per capita',
-         'API',
-         'https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD');
-END;
 
+    DECLARE @nuevo_id int;
+
+    SELECT @nuevo_id = ISNULL(MAX(id), 0) + 1
+    FROM integracion.FuenteDatos;
+
+    INSERT INTO integracion.FuenteDatos
+    (
+        id,
+        nombre,
+        tipo,
+        url
+    )
+    VALUES
+    (
+        @nuevo_id,
+        'World Bank - GDP per capita',
+        'API',
+        'https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD'
+    );
+
+END;
+GO

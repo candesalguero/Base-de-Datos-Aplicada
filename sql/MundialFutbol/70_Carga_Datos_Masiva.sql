@@ -28,57 +28,125 @@ BEGIN TRY
     PRINT '  1. POBLAMIENTO DE CATÁLOGOS BASE (ESQUEMA GENERAL)';
 
     -- 1.1 Confederaciones
-    MERGE general.Confederacion AS T
-    USING (VALUES
-        (1, 'CONMEBOL'),
-        (2, 'UEFA'),
-        (3, 'CONCACAF'),
-        (4, 'CAF'),
-        (5, 'AFC'),
-        (6, 'OFC')
-    ) AS S (id, nombre)
-    ON T.id = S.id
-    WHEN NOT MATCHED THEN INSERT (id, nombre) VALUES (S.id, S.nombre);
+    -- Se insertan solamente las faltantes y se generan IDs a partir del máximo actual.
+    DECLARE @confederaciones TABLE
+    (
+        nombre varchar(100) PRIMARY KEY
+    );
+
+    INSERT INTO @confederaciones (nombre)
+    VALUES
+        ('CONMEBOL'),
+        ('UEFA'),
+        ('CONCACAF'),
+        ('CAF'),
+        ('AFC'),
+        ('OFC');
+
+    DECLARE @max_id_confederacion int = ISNULL((SELECT MAX(id) FROM general.Confederacion), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            c.nombre,
+            ROW_NUMBER() OVER (ORDER BY c.nombre) AS nro
+        FROM @confederaciones c
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM general.Confederacion existente
+            WHERE UPPER(LTRIM(RTRIM(existente.nombre))) = UPPER(LTRIM(RTRIM(c.nombre)))
+        )
+    )
+    INSERT INTO general.Confederacion (id, nombre)
+    SELECT
+        @max_id_confederacion + CAST(nro AS int),
+        nombre
+    FROM Faltantes;
+
 
     -- 1.2 Países (Participantes + Países de árbitros + Mercados de interés)
-    MERGE general.Pais AS T
-    USING (VALUES
-        (1,  'Argentina',       'AR', 'UTC-3',  1),
-        (2,  'Brasil',          'BR', 'UTC-3',  1),
-        (3,  'Uruguay',         'UY', 'UTC-3',  1),
-        (4,  'Colombia',        'CO', 'UTC-5',  1),
-        (5,  'Francia',         'FR', 'UTC+1',  2),
-        (6,  'España',          'ES', 'UTC+1',  2),
-        (7,  'Alemania',        'DE', 'UTC+1',  2),
-        (8,  'Inglaterra',      'GB', 'UTC+0',  2),
-        (9,  'Italia',          'IT', 'UTC+1',  2),
-        (10, 'Países Bajos',    'NL', 'UTC+1',  2),
-        (11, 'Croacia',         'HR', 'UTC+1',  2),
-        (12, 'Polonia',         'PL', 'UTC+1',  2),
-        (13, 'Estados Unidos',  'US', 'UTC-5',  3),
-        (14, 'México',          'MX', 'UTC-6',  3),
-        (15, 'Canadá',          'CA', 'UTC-5',  3),
-        (16, 'Marruecos',       'MA', 'UTC+1',  4),
-        (17, 'Senegal',         'SN', 'UTC+0',  4),
-        (18, 'Qatar',           'QA', 'UTC+3',  5),
-        (19, 'Japón',           'JP', 'UTC+9',  5),
-        (20, 'Corea del Sur',   'KR', 'UTC+9',  5),
-        (21, 'Australia',       'AU', 'UTC+10', 5),
-        (22, 'Bélgica',         'BE', 'UTC+1',  2),
-        (23, 'Suecia',          'SE', 'UTC+1',  2),
-        (24, 'Rusia',           'RU', 'UTC+3',  2),
-        (25, 'Suiza',           'CH', 'UTC+1',  2),
-        (26, 'Hungría',         'HU', 'UTC+1',  2),
-        (27, 'Eslovenia',       'SI', 'UTC+1',  2)
-    ) AS S (id, nombre, ISO2, huso_horario, id_confederacion)
-    ON T.ISO2 = S.ISO2 COLLATE Latin1_General_CS_AI
-    WHEN NOT MATCHED THEN
-        INSERT (id, nombre, ISO2, huso_horario, id_confederacion)
-        VALUES (S.id, S.nombre, S.ISO2, S.huso_horario, S.id_confederacion);
+    -- La clave lógica utilizada para evitar duplicados es ISO2.
+    DECLARE @paises TABLE
+    (
+        nombre varchar(100),
+        ISO2 char(2),
+        huso_horario varchar(50),
+        confederacion varchar(100)
+    );
+
+    INSERT INTO @paises (nombre, ISO2, huso_horario, confederacion)
+    VALUES
+        ('Argentina',       'AR', 'UTC-3',  'CONMEBOL'),
+        ('Brasil',          'BR', 'UTC-3',  'CONMEBOL'),
+        ('Uruguay',         'UY', 'UTC-3',  'CONMEBOL'),
+        ('Colombia',        'CO', 'UTC-5',  'CONMEBOL'),
+        ('Francia',         'FR', 'UTC+1',  'UEFA'),
+        ('España',          'ES', 'UTC+1',  'UEFA'),
+        ('Alemania',        'DE', 'UTC+1',  'UEFA'),
+        ('Inglaterra',      'GB', 'UTC+0',  'UEFA'),
+        ('Italia',          'IT', 'UTC+1',  'UEFA'),
+        ('Países Bajos',    'NL', 'UTC+1',  'UEFA'),
+        ('Croacia',         'HR', 'UTC+1',  'UEFA'),
+        ('Polonia',         'PL', 'UTC+1',  'UEFA'),
+        ('Estados Unidos',  'US', 'UTC-5',  'CONCACAF'),
+        ('México',          'MX', 'UTC-6',  'CONCACAF'),
+        ('Canadá',          'CA', 'UTC-5',  'CONCACAF'),
+        ('Marruecos',       'MA', 'UTC+1',  'CAF'),
+        ('Senegal',         'SN', 'UTC+0',  'CAF'),
+        ('Qatar',           'QA', 'UTC+3',  'AFC'),
+        ('Japón',           'JP', 'UTC+9',  'AFC'),
+        ('Corea del Sur',   'KR', 'UTC+9',  'AFC'),
+        ('Australia',       'AU', 'UTC+10', 'AFC'),
+        ('China',           'CN', 'UTC+8',  'AFC'),
+        ('Bélgica',         'BE', 'UTC+1',  'UEFA'),
+        ('Suecia',          'SE', 'UTC+1',  'UEFA'),
+        ('Rusia',           'RU', 'UTC+3',  'UEFA'),
+        ('Suiza',           'CH', 'UTC+1',  'UEFA'),
+        ('Hungría',         'HU', 'UTC+1',  'UEFA'),
+        ('Eslovenia',       'SI', 'UTC+1',  'UEFA');
+
+    DECLARE @max_id_pais int = ISNULL((SELECT MAX(id) FROM general.Pais), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            p.nombre,
+            p.ISO2,
+            p.huso_horario,
+            c.id AS id_confederacion,
+            ROW_NUMBER() OVER (ORDER BY p.ISO2) AS nro
+        FROM @paises p
+        INNER JOIN general.Confederacion c
+            ON UPPER(LTRIM(RTRIM(c.nombre))) = UPPER(LTRIM(RTRIM(p.confederacion)))
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM general.Pais existente
+            WHERE existente.ISO2 = p.ISO2 COLLATE Latin1_General_CS_AI
+        )
+    )
+    INSERT INTO general.Pais
+    (
+        id,
+        nombre,
+        ISO2,
+        huso_horario,
+        id_confederacion
+    )
+    SELECT
+        @max_id_pais + CAST(nro AS int),
+        nombre,
+        ISO2,
+        huso_horario,
+        id_confederacion
+    FROM Faltantes;
+
 
     -- 1.3 Idiomas (ISO639 en minúsculas según ck_iso639)
-    MERGE general.Idioma AS T
-    USING (VALUES
+    INSERT INTO general.Idioma (ISO639, nombre)
+    SELECT v.ISO639, v.nombre
+    FROM (VALUES
         ('spa', 'Español'),
         ('eng', 'Inglés'),
         ('por', 'Portugués'),
@@ -86,21 +154,52 @@ BEGIN TRY
         ('deu', 'Alemán'),
         ('ara', 'Árabe'),
         ('jpn', 'Japonés')
-    ) AS S (ISO639, nombre)
-    ON T.ISO639 = S.ISO639 COLLATE Latin1_General_CS_AI
-    WHEN NOT MATCHED THEN INSERT (ISO639, nombre) VALUES (S.ISO639, S.nombre);
+    ) AS v(ISO639, nombre)
+    WHERE NOT EXISTS
+    (
+        SELECT 1
+        FROM general.Idioma i
+        WHERE i.ISO639 = v.ISO639 COLLATE Latin1_General_CS_AI
+    );
+
 
     -- 1.4 Monedas (ISO3 en mayúsculas según ck_iso3)
-    MERGE general.Moneda AS T
-    USING (VALUES
-        (1, 'USD', 'Dólar Estadounidense'),
-        (2, 'EUR', 'Euro'),
-        (3, 'ARS', 'Peso Argentino'),
-        (4, 'MXN', 'Peso Mexicano'),
-        (5, 'GBP', 'Libra Esterlina')
-    ) AS S (id, cod_iso3, nombre)
-    ON T.cod_iso3 = S.cod_iso3 COLLATE Latin1_General_CS_AS
-    WHEN NOT MATCHED THEN INSERT (id, cod_iso3, nombre) VALUES (S.id, S.cod_iso3, S.nombre);
+    DECLARE @monedas TABLE
+    (
+        cod_iso3 char(3),
+        nombre varchar(100)
+    );
+
+    INSERT INTO @monedas (cod_iso3, nombre)
+    VALUES
+        ('USD', 'Dólar Estadounidense'),
+        ('EUR', 'Euro'),
+        ('ARS', 'Peso Argentino'),
+        ('MXN', 'Peso Mexicano'),
+        ('GBP', 'Libra Esterlina');
+
+    DECLARE @max_id_moneda int = ISNULL((SELECT MAX(id) FROM general.Moneda), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            m.cod_iso3,
+            m.nombre,
+            ROW_NUMBER() OVER (ORDER BY m.cod_iso3) AS nro
+        FROM @monedas m
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM general.Moneda existente
+            WHERE existente.cod_iso3 = m.cod_iso3 COLLATE Latin1_General_CS_AS
+        )
+    )
+    INSERT INTO general.Moneda (id, cod_iso3, nombre)
+    SELECT
+        @max_id_moneda + CAST(nro AS int),
+        cod_iso3,
+        nombre
+    FROM Faltantes;
 
     DECLARE @id_usd int = (SELECT id FROM general.Moneda WHERE cod_iso3 = 'USD');
     DECLARE @id_eur int = (SELECT id FROM general.Moneda WHERE cod_iso3 = 'EUR');
@@ -110,41 +209,118 @@ BEGIN TRY
 
 
     -- 1.7 Fases del Torneo
-    MERGE general.Fase AS T
-    USING (VALUES
-        (1, 'grupos',          1, 0),
-        (2, 'octavos',         2, 1),
-        (3, 'cuartos',         3, 1),
-        (4, 'semifinal',     4, 1),
-        (5, 'tercer_puesto',   5, 1),
-        (6, 'final',           6, 1)
-    ) AS S (id, nombre, orden, es_eliminacion_directa)
-    ON T.id = S.id
-    WHEN NOT MATCHED THEN
-        INSERT (id, nombre, orden, es_eliminacion_directa)
-        VALUES (S.id, S.nombre, S.orden, S.es_eliminacion_directa);
+    -- Se utilizan los nombres definidos por el modelo y luego se recuperan sus IDs reales.
+    DECLARE @fases TABLE
+    (
+        nombre varchar(30),
+        orden tinyint,
+        es_eliminacion_directa bit
+    );
+
+    INSERT INTO @fases (nombre, orden, es_eliminacion_directa)
+    VALUES
+        ('grupos',        1, 0),
+        ('dieciseisavos', 2, 1),
+        ('octavos',       3, 1),
+        ('cuartos',       4, 1),
+        ('semifinales',   5, 1),
+        ('tercer puesto', 6, 1),
+        ('final',         7, 1);
+
+    DECLARE @max_id_fase int = ISNULL((SELECT MAX(id) FROM general.Fase), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            f.nombre,
+            f.orden,
+            f.es_eliminacion_directa,
+            ROW_NUMBER() OVER (ORDER BY f.orden) AS nro
+        FROM @fases f
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM general.Fase existente
+            WHERE LOWER(LTRIM(RTRIM(existente.nombre))) = LOWER(LTRIM(RTRIM(f.nombre)))
+        )
+    )
+    INSERT INTO general.Fase (id, nombre, orden, es_eliminacion_directa)
+    SELECT
+        @max_id_fase + CAST(nro AS int),
+        nombre,
+        orden,
+        es_eliminacion_directa
+    FROM Faltantes;
+
+    DECLARE @fase_grupos int =
+        (SELECT TOP 1 id FROM general.Fase WHERE LOWER(LTRIM(RTRIM(nombre))) = 'grupos');
+    DECLARE @fase_cuartos int =
+        (SELECT TOP 1 id FROM general.Fase WHERE LOWER(LTRIM(RTRIM(nombre))) = 'cuartos');
+    DECLARE @fase_semifinales int =
+        (SELECT TOP 1 id FROM general.Fase WHERE LOWER(LTRIM(RTRIM(nombre))) = 'semifinales');
+    DECLARE @fase_final int =
+        (SELECT TOP 1 id FROM general.Fase WHERE LOWER(LTRIM(RTRIM(nombre))) = 'final');
+
 
     -- 1.8 Sedes (Estadios)
-    DECLARE @p_us int = (SELECT id FROM general.Pais WHERE ISO2 = 'US');
-    DECLARE @p_mx int = (SELECT id FROM general.Pais WHERE ISO2 = 'MX');
-    DECLARE @p_ca int = (SELECT id FROM general.Pais WHERE ISO2 = 'CA');
-    DECLARE @p_qa int = (SELECT id FROM general.Pais WHERE ISO2 = 'QA');
+    DECLARE @sedes TABLE
+    (
+        pais_iso2 char(2),
+        nombre_estadio nvarchar(50),
+        ciudad nvarchar(50),
+        capacidad int,
+        huso_horario varchar(50)
+    );
 
-    MERGE general.Sede AS T
-    USING (VALUES
-        (1, @p_us, N'MetLife Stadium',      N'New Jersey',   82500, 'UTC-5'),
-        (2, @p_us, N'SoFi Stadium',         N'Los Ángeles',  70240, 'UTC-8'),
-        (3, @p_us, N'AT&T Stadium',         N'Dallas',       80000, 'UTC-6'),
-        (4, @p_us, N'Hard Rock Stadium',    N'Miami',        65326, 'UTC-5'),
-        (5, @p_mx, N'Estadio Azteca',       N'Ciudad México',87523, 'UTC-6'),
-        (6, @p_ca, N'BMO Field',            N'Toronto',      45736, 'UTC-5'),
-        (7, @p_qa, N'Lusail Stadium',       N'Lusail',       88966, 'UTC+3'),
-        (8, @p_qa, N'Al Bayt Stadium',      N'Al Khor',      68895, 'UTC+3')
-    ) AS S (id, id_pais, nombre_estadio, ciudad, capacidad, huso_horario)
-    ON T.nombre_estadio = S.nombre_estadio
-    WHEN NOT MATCHED THEN
-        INSERT (id, id_pais, nombre_estadio, ciudad, capacidad, huso_horario)
-        VALUES (S.id, S.id_pais, S.nombre_estadio, S.ciudad, S.capacidad, S.huso_horario);
+    INSERT INTO @sedes (pais_iso2, nombre_estadio, ciudad, capacidad, huso_horario)
+    VALUES
+        ('US', N'MetLife Stadium',   N'New Jersey',    82500, 'UTC-5'),
+        ('US', N'SoFi Stadium',      N'Los Ángeles',   70240, 'UTC-8'),
+        ('US', N'AT&T Stadium',      N'Dallas',        80000, 'UTC-6'),
+        ('US', N'Hard Rock Stadium', N'Miami',         65326, 'UTC-5'),
+        ('MX', N'Estadio Azteca',    N'Ciudad México', 87523, 'UTC-6'),
+        ('CA', N'BMO Field',         N'Toronto',       45736, 'UTC-5'),
+        ('QA', N'Lusail Stadium',    N'Lusail',        88966, 'UTC+3'),
+        ('QA', N'Al Bayt Stadium',   N'Al Khor',       68895, 'UTC+3');
+
+    DECLARE @max_id_sede int = ISNULL((SELECT MAX(id) FROM general.Sede), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            p.id AS id_pais,
+            s.nombre_estadio,
+            s.ciudad,
+            s.capacidad,
+            s.huso_horario,
+            ROW_NUMBER() OVER (ORDER BY s.nombre_estadio) AS nro
+        FROM @sedes s
+        INNER JOIN general.Pais p
+            ON p.ISO2 = s.pais_iso2 COLLATE Latin1_General_CS_AI
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM general.Sede existente
+            WHERE UPPER(LTRIM(RTRIM(existente.nombre_estadio))) = UPPER(LTRIM(RTRIM(s.nombre_estadio)))
+        )
+    )
+    INSERT INTO general.Sede
+    (
+        id,
+        id_pais,
+        nombre_estadio,
+        ciudad,
+        capacidad,
+        huso_horario
+    )
+    SELECT
+        @max_id_sede + CAST(nro AS int),
+        id_pais,
+        nombre_estadio,
+        ciudad,
+        capacidad,
+        huso_horario
+    FROM Faltantes;
 
     PRINT 'OK - Esquema general poblado.';
 
@@ -327,42 +503,90 @@ BEGIN TRY
     DECLARE @st_azteca  int = (SELECT TOP 1 id FROM general.Sede WHERE nombre_estadio LIKE '%Azteca%');
     DECLARE @st_lusail  int = (SELECT TOP 1 id FROM general.Sede WHERE nombre_estadio LIKE '%Lusail%');
 
-    -- Insertar 12 partidos  pensados para probar Prime Time en distintos mercados
-    IF NOT EXISTS (SELECT 1 FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_mx)
-    BEGIN
-        INSERT INTO deportivo.Partido (id_sede, id_fase, id_seleccion_local, id_seleccion_visitante, fecha_hora_local, fecha_hora_utc, goles_local, goles_visitante, asistencia_publico)
-        VALUES
-            -- Fase de Grupos (fase = 1)
-            (@st_sofi,    1, @s_us, @s_nl, '2026-06-12 18:00:00', '2026-06-13 02:00:00', 1, 2, 68500), -- P1: Prime time US/AR
-            (@st_azteca,  1, @s_mx, @s_pl, '2026-06-13 19:00:00', '2026-06-14 01:00:00', 2, 1, 86200), -- P2: Prime time MX/US/AR
-            (@st_att,     1, @s_ar, @s_pl, '2026-06-14 17:00:00', '2026-06-14 23:00:00', 3, 1, 79100), -- P3: Prime time AR (20hs)
-            (@st_miami,   1, @s_ar, @s_mx, '2026-06-18 20:00:00', '2026-06-19 01:00:00', 2, 0, 65000), -- P4: Prime time AR (22hs) y US
-            (@st_metlife, 1, @s_es, @s_de, '2026-06-15 15:00:00', '2026-06-15 20:00:00', 2, 2, 81400), -- P5: Prime time ES/DE (21hs)
-            (@st_sofi,    1, @s_de, @s_jp, '2026-06-19 12:00:00', '2026-06-19 20:00:00', 1, 2, 67000), -- P6: Prime time DE (21hs)
-            (@st_att,     1, @s_br, @s_ma, '2026-06-16 18:00:00', '2026-06-17 00:00:00', 3, 1, 78900), -- P7: Prime time BR (21hs)
-            (@st_miami,   1, @s_fr, @s_gb, '2026-06-17 15:00:00', '2026-06-17 20:00:00', 2, 1, 64800), -- P8: Prime time FR (21hs) y GB (20hs)
-            -- Cuartos de Final (fase = 3)
-            (@st_att,     3, @s_ar, @s_nl, '2026-07-04 18:00:00', '2026-07-05 00:00:00', 3, 2, 80000), -- P9
-            (@st_metlife, 3, @s_fr, @s_es, '2026-07-05 15:00:00', '2026-07-05 20:00:00', 2, 1, 82500), -- P10
-            -- Semifinal (fase = 4)
-            (@st_lusail,  4, @s_ar, @s_br, '2026-07-14 21:00:00', '2026-07-14 18:00:00', 2, 1, 88900), -- P11
-            -- Final (fase = 6)
-            (@st_metlife, 6, @s_ar, @s_fr, '2026-07-19 16:00:00', '2026-07-19 21:00:00', 3, 3, 82500); -- P12
-    END;
+    -- Insertar 12 partidos pensados para probar Prime Time en distintos mercados.
+    -- Cada partido se controla individualmente por selecciones y fecha/hora local.
+    INSERT INTO deportivo.Partido
+    (
+        id_sede,
+        id_fase,
+        id_seleccion_local,
+        id_seleccion_visitante,
+        fecha_hora_local,
+        fecha_hora_utc,
+        goles_local,
+        goles_visitante,
+        asistencia_publico
+    )
+    SELECT
+        v.id_sede,
+        v.id_fase,
+        v.id_local,
+        v.id_visitante,
+        v.fecha_local,
+        v.fecha_utc,
+        v.goles_local,
+        v.goles_visitante,
+        v.asistencia
+    FROM (VALUES
+        (@st_sofi,    @fase_grupos,       @s_us, @s_nl, CONVERT(datetime, '2026-06-12 18:00:00'), CONVERT(datetime, '2026-06-13 02:00:00'), 1, 2, 68500),
+        (@st_azteca,  @fase_grupos,       @s_mx, @s_pl, CONVERT(datetime, '2026-06-13 19:00:00'), CONVERT(datetime, '2026-06-14 01:00:00'), 2, 1, 86200),
+        (@st_att,     @fase_grupos,       @s_ar, @s_pl, CONVERT(datetime, '2026-06-14 17:00:00'), CONVERT(datetime, '2026-06-14 23:00:00'), 3, 1, 79100),
+        (@st_miami,   @fase_grupos,       @s_ar, @s_mx, CONVERT(datetime, '2026-06-18 20:00:00'), CONVERT(datetime, '2026-06-19 01:00:00'), 2, 0, 65000),
+        (@st_metlife, @fase_grupos,       @s_es, @s_de, CONVERT(datetime, '2026-06-15 15:00:00'), CONVERT(datetime, '2026-06-15 20:00:00'), 2, 2, 81400),
+        (@st_sofi,    @fase_grupos,       @s_de, @s_jp, CONVERT(datetime, '2026-06-19 12:00:00'), CONVERT(datetime, '2026-06-19 20:00:00'), 1, 2, 67000),
+        (@st_att,     @fase_grupos,       @s_br, @s_ma, CONVERT(datetime, '2026-06-16 18:00:00'), CONVERT(datetime, '2026-06-17 00:00:00'), 3, 1, 78900),
+        (@st_miami,   @fase_grupos,       @s_fr, @s_gb, CONVERT(datetime, '2026-06-17 15:00:00'), CONVERT(datetime, '2026-06-17 20:00:00'), 2, 1, 64800),
+        (@st_att,     @fase_cuartos,      @s_ar, @s_nl, CONVERT(datetime, '2026-07-04 18:00:00'), CONVERT(datetime, '2026-07-05 00:00:00'), 3, 2, 80000),
+        (@st_metlife, @fase_cuartos,      @s_fr, @s_es, CONVERT(datetime, '2026-07-05 15:00:00'), CONVERT(datetime, '2026-07-05 20:00:00'), 2, 1, 82500),
+        (@st_lusail,  @fase_semifinales,  @s_ar, @s_br, CONVERT(datetime, '2026-07-14 21:00:00'), CONVERT(datetime, '2026-07-14 18:00:00'), 2, 1, 88900),
+        (@st_metlife, @fase_final,         @s_ar, @s_fr, CONVERT(datetime, '2026-07-19 16:00:00'), CONVERT(datetime, '2026-07-19 21:00:00'), 3, 3, 82500)
+    ) AS v
+    (
+        id_sede,
+        id_fase,
+        id_local,
+        id_visitante,
+        fecha_local,
+        fecha_utc,
+        goles_local,
+        goles_visitante,
+        asistencia
+    )
+    WHERE NOT EXISTS
+    (
+        SELECT 1
+        FROM deportivo.Partido p
+        WHERE p.id_seleccion_local = v.id_local
+          AND p.id_seleccion_visitante = v.id_visitante
+          AND p.fecha_hora_local = v.fecha_local
+    );
 
-    -- Capturar IDs de los partidos cargados
-    DECLARE @p_ar_pl int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_pl);
-    DECLARE @p_ar_mx int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_mx);
-    DECLARE @p_es_de int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_es AND id_seleccion_visitante = @s_de);
-    DECLARE @p_br_ma int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_br AND id_seleccion_visitante = @s_ma);
-    DECLARE @p_fr_gb int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_fr AND id_seleccion_visitante = @s_gb);
-    DECLARE @p_ar_nl int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_nl);
-    DECLARE @p_fr_es int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_fr AND id_seleccion_visitante = @s_es);
-    DECLARE @p_ar_br int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_br);
-    DECLARE @p_ar_fr int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_fr);
-    DECLARE @p_mx_pl int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_mx AND id_seleccion_visitante = @s_pl);
-    DECLARE @p_us_nl int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_us AND id_seleccion_visitante = @s_nl);
-    DECLARE @p_de_jp int = (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_de AND id_seleccion_visitante = @s_jp);
+    -- Capturar los IDs de los partidos específicos de esta carga.
+    -- Se incluye la fecha para no tomar por error un partido histórico importado anteriormente.
+    DECLARE @p_ar_pl int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_pl AND fecha_hora_local = '2026-06-14 17:00:00');
+    DECLARE @p_ar_mx int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_mx AND fecha_hora_local = '2026-06-18 20:00:00');
+    DECLARE @p_es_de int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_es AND id_seleccion_visitante = @s_de AND fecha_hora_local = '2026-06-15 15:00:00');
+    DECLARE @p_br_ma int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_br AND id_seleccion_visitante = @s_ma AND fecha_hora_local = '2026-06-16 18:00:00');
+    DECLARE @p_fr_gb int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_fr AND id_seleccion_visitante = @s_gb AND fecha_hora_local = '2026-06-17 15:00:00');
+    DECLARE @p_ar_nl int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_nl AND fecha_hora_local = '2026-07-04 18:00:00');
+    DECLARE @p_fr_es int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_fr AND id_seleccion_visitante = @s_es AND fecha_hora_local = '2026-07-05 15:00:00');
+    DECLARE @p_ar_br int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_br AND fecha_hora_local = '2026-07-14 21:00:00');
+    DECLARE @p_ar_fr int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_ar AND id_seleccion_visitante = @s_fr AND fecha_hora_local = '2026-07-19 16:00:00');
+    DECLARE @p_mx_pl int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_mx AND id_seleccion_visitante = @s_pl AND fecha_hora_local = '2026-06-13 19:00:00');
+    DECLARE @p_us_nl int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_us AND id_seleccion_visitante = @s_nl AND fecha_hora_local = '2026-06-12 18:00:00');
+    DECLARE @p_de_jp int =
+        (SELECT TOP 1 id FROM deportivo.Partido WHERE id_seleccion_local = @s_de AND id_seleccion_visitante = @s_jp AND fecha_hora_local = '2026-06-19 12:00:00');
 
     -- Helper inline para obtener id_convocatoria por documento
     DECLARE @c_messi   int = (SELECT c.id FROM deportivo.Convocatoria c JOIN deportivo.Jugador j ON c.id_jugador = j.id WHERE j.documento_identidad = 'JUG-AR-10');
@@ -505,16 +729,44 @@ BEGIN TRY
     
 
     -- 4.1 Roles Arbitrales
-    MERGE arbitraje.RolArbitral AS T
-    USING (VALUES
-        (1, 'Árbitro Principal'),
-        (2, 'Árbitro Asistente 1'),
-        (3, 'Árbitro Asistente 2'),
-        (4, 'Cuarto Árbitro'),
-        (5, 'VAR')
-    ) AS S (id, nombre)
-    ON T.id = S.id
-    WHEN NOT MATCHED THEN INSERT (id, nombre) VALUES (S.id, S.nombre);
+    DECLARE @roles_arbitrales TABLE
+    (
+        nombre varchar(60)
+    );
+
+    INSERT INTO @roles_arbitrales (nombre)
+    VALUES
+        ('Árbitro Principal'),
+        ('Árbitro Asistente 1'),
+        ('Árbitro Asistente 2'),
+        ('Cuarto Árbitro'),
+        ('VAR');
+
+    DECLARE @max_id_rol_arbitral int = ISNULL((SELECT MAX(id) FROM arbitraje.RolArbitral), 0);
+
+    ;WITH Faltantes AS
+    (
+        SELECT
+            r.nombre,
+            ROW_NUMBER() OVER (ORDER BY r.nombre) AS nro
+        FROM @roles_arbitrales r
+        WHERE NOT EXISTS
+        (
+            SELECT 1
+            FROM arbitraje.RolArbitral existente
+            WHERE UPPER(LTRIM(RTRIM(existente.nombre))) = UPPER(LTRIM(RTRIM(r.nombre)))
+        )
+    )
+    INSERT INTO arbitraje.RolArbitral (id, nombre)
+    SELECT
+        @max_id_rol_arbitral + CAST(nro AS int),
+        nombre
+    FROM Faltantes;
+
+    DECLARE @rol_arbitro_principal int =
+        (SELECT TOP 1 id FROM arbitraje.RolArbitral WHERE nombre = 'Árbitro Principal');
+    DECLARE @rol_var int =
+        (SELECT TOP 1 id FROM arbitraje.RolArbitral WHERE nombre = 'VAR');
 
     -- 4.2 Designaciones usando los árbitros cargados
     DECLARE @arb_marciniak int = (SELECT TOP 1 id FROM arbitraje.Arbitro WHERE apellido LIKE '%Marciniak%');
@@ -532,14 +784,14 @@ BEGIN TRY
     BEGIN
         INSERT INTO arbitraje.DesignacionArbitral (id, id_partido, id_arbitro, id_rol_arbitral, estado, motivo_descarte)
         VALUES
-            (@next_des_id,     @p_ar_fr, @arb_marciniak, 1, 'Confirmada', NULL),
-            (@next_des_id + 1, @p_ar_fr, @arb_vincic,    5, 'Confirmada', NULL),
-            (@next_des_id + 2, @p_ar_br, @arb_collina,   1, 'Confirmada', NULL),
-            (@next_des_id + 3, @p_ar_nl, @arb_webb,      1, 'Confirmada', NULL),
-            (@next_des_id + 4, @p_fr_es, @arb_pitana,    1, 'Confirmada', NULL),
-            (@next_des_id + 5, @p_es_de, @arb_rizzoli,   1, 'Confirmada', NULL),
-            (@next_des_id + 6, @p_br_ma, @arb_elizondo,  1, 'Confirmada', NULL),
-            (@next_des_id + 7, @p_ar_pl, @arb_codesal,   1, 'Confirmada', NULL);
+            (@next_des_id,     @p_ar_fr, @arb_marciniak, @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 1, @p_ar_fr, @arb_vincic,    @rol_var, 'Confirmada', NULL),
+            (@next_des_id + 2, @p_ar_br, @arb_collina,   @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 3, @p_ar_nl, @arb_webb,      @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 4, @p_fr_es, @arb_pitana,    @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 5, @p_es_de, @arb_rizzoli,   @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 6, @p_br_ma, @arb_elizondo,  @rol_arbitro_principal, 'Confirmada', NULL),
+            (@next_des_id + 7, @p_ar_pl, @arb_codesal,   @rol_arbitro_principal, 'Confirmada', NULL);
 
         DECLARE @next_inf_id int = ISNULL((SELECT MAX(id) FROM arbitraje.InformePostPartido), 0) + 1;
 
