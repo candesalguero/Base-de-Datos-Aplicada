@@ -84,3 +84,6 @@ IF NOT EXISTS (
 
 PRINT 'OK - importación parcial, error por país inexistente, upsert y logs verificados.';
 GO
+
+
+
