@@ -1,558 +1,279 @@
-# \# MundialFutbol — Base de Datos Aplicada
+# MundialFutbol — Base de Datos Aplicada
 
-# 
+Proyecto desarrollado para la materia **Bases de Datos Aplicada** de la Universidad Nacional de La Matanza.
 
-# Proyecto desarrollado para la materia \*\*Bases de Datos Aplicada\*\* de la \*\*Universidad Nacional de La Matanza\*\*.
+## Integrantes
 
-# 
+- Salguero, Candela
+- Ocaranza, Lucila
+- Dimattia Damm, Malena
+- Fuentes, Martina Alejandra
 
-# \## Integrantes
+## Objetivo
 
-# 
+Desarrollar una base de datos para la gestión integral de un Mundial de Fútbol, centralizando información relacionada con:
 
-# \- Salguero, Candela
+- selecciones y jugadores;
+- convocatorias y cuerpos técnicos;
+- partidos y sedes;
+- formaciones y sustituciones;
+- goles, tarjetas y sanciones;
+- árbitros y designaciones;
+- publicidad;
+- fuentes externas e importaciones;
+- indicadores económicos y tipos de cambio;
+- reportes estadísticos.
 
-# \- Ocaranza, Lucila
+El proyecto fue desarrollado utilizando **Microsoft SQL Server** y **SQL Server Management Studio (SSMS)**.
 
-# \- Dimattia Damm, Malena
+## Estructura principal
 
-# \- Fuentes, Martina Alejandra
+La base de datos `MundialFutbol` se divide en los siguientes esquemas:
 
-# 
+### `general`
 
-# \## Objetivo
+Contiene información general utilizada por los distintos módulos:
 
-# 
+- países;
+- confederaciones;
+- idiomas;
+- monedas;
+- tipos de cambio;
+- indicadores económicos;
+- fases;
+- sedes.
 
-# Desarrollar una base de datos para la gestión integral de un Mundial de Fútbol, centralizando información relacionada con:
+### `deportivo`
 
-# 
+Contiene la información relacionada con el desarrollo deportivo del torneo:
 
-# \- selecciones y jugadores;
+- selecciones;
+- jugadores;
+- convocatorias;
+- cuerpo técnico;
+- partidos;
+- alineaciones;
+- sustituciones;
+- goles;
+- tarjetas;
+- sanciones.
 
-# \- convocatorias y cuerpos técnicos;
+### `arbitraje`
 
-# \- partidos y sedes;
+Gestiona:
 
-# \- formaciones y sustituciones;
+- árbitros;
+- idiomas;
+- roles arbitrales;
+- designaciones;
+- informes posteriores a los partidos.
 
-# \- goles, tarjetas y sanciones;
+### `publicidad`
 
-# \- árbitros y designaciones;
+Gestiona:
 
-# \- publicidad;
+- anunciantes;
+- campañas;
+- tarifas;
+- piezas de contenido;
+- espacios publicitarios;
+- mercados de interés;
+- exhibiciones publicitarias.
 
-# \- fuentes externas e importaciones;
+### `integracion`
 
-# \- indicadores económicos y tipos de cambio;
+Se utiliza para los procesos de importación:
 
-# \- reportes estadísticos.
+- fuentes de datos;
+- logs de importación;
+- detalle de errores;
+- tablas de staging.
 
-# 
+## Stored Procedures
 
-# El proyecto fue desarrollado utilizando \*\*Microsoft SQL Server\*\* y \*\*SQL Server Management Studio (SSMS)\*\*.
+Se implementaron procedimientos almacenados para:
 
-# 
+- ABM de las entidades principales;
+- reglas de negocio;
+- registro de goles;
+- formaciones;
+- sustituciones;
+- tarjetas y sanciones;
+- validación de plantillas;
+- importación de datos externos;
+- carga mediante APIs;
+- generación de reportes.
 
-# \## Estructura principal
+Los procedimientos realizan validaciones y utilizan `THROW` para informar errores.
 
-# 
+En los procesos que requieren iteración se prioriza la lógica de conjuntos y, cuando es necesario, se utilizan bucles `WHILE`. No se utilizan cursores.
 
-# La base de datos `MundialFutbol` se divide en los siguientes esquemas:
+## Importaciones
 
-# 
+El sistema permite importar información externa y registrar el resultado de cada proceso.
 
-# \### `general`
+### Partidos mediante CSV
 
-# 
+Se utiliza un archivo `matches.csv`.
 
-# Contiene información general utilizada por los distintos módulos:
+Flujo:
 
-# 
+```text
+CSV
+→ tabla staging
+→ validaciones y transformaciones
+→ INSERT / UPDATE
+→ LogImportacion
+→ DetalleErrorImportacion
+```
 
-# \- países;
+La importación soporta procesamiento parcial: los registros válidos se procesan aunque otros registros presenten errores.
 
-# \- confederaciones;
+También implementa **upsert**, evitando generar duplicados al importar nuevamente el mismo dataset.
 
-# \- idiomas;
+### Árbitros mediante XML
 
-# \- monedas;
+Se implementó una importación desde XML para incorporar información arbitral.
 
-# \- tipos de cambio;
+### World Bank API
 
-# \- indicadores económicos;
+Se utiliza la API del Banco Mundial para obtener información de **PBI per cápita**.
 
-# \- fases;
+El proceso:
 
-# \- sedes.
+```text
+World Bank API
+→ Python
+→ JSON
+→ Stored Procedure
+→ general.IndicadorEconomico
+```
 
-# 
+### Frankfurter API
 
-# \### `deportivo`
+Se utiliza Frankfurter para obtener tipos de cambio entre las monedas registradas.
 
-# 
+El proceso:
 
-# Contiene la información relacionada con el desarrollo deportivo del torneo:
+```text
+general.Moneda
+→ Frankfurter API
+→ Python
+→ JSON
+→ Stored Procedure
+→ general.TipoCambio
+```
 
-# 
+Las importaciones mediante API también implementan lógica de actualización para evitar registros duplicados.
 
-# \- selecciones;
+## Testing
 
-# \- jugadores;
+Los Stored Procedures cuentan con scripts de testing separados.
 
-# \- convocatorias;
+Las pruebas incluyen:
 
-# \- cuerpo técnico;
+- casos exitosos;
+- validaciones esperadas;
+- manejo de errores;
+- rollback de datos temporales;
+- savepoints;
+- pruebas de importación parcial;
+- pruebas de upsert.
 
-# \- partidos;
+Cuando una prueba debe fallar de manera intencional, se utilizan transacciones y savepoints para evitar perder los datos auxiliares necesarios para continuar con el resto de los tests.
 
-# \- alineaciones;
+## Carga de datos
 
-# \- sustituciones;
+Se incluye un script de carga masiva con información representativa para permitir la ejecución de los reportes.
 
-# \- goles;
+La carga contempla, entre otros:
 
-# \- tarjetas;
+- países;
+- selecciones;
+- jugadores;
+- convocatorias;
+- partidos;
+- goles;
+- tarjetas;
+- sanciones;
+- árbitros;
+- campañas publicitarias;
+- exhibiciones.
 
-# \- sanciones.
+Los scripts evitan depender de IDs fijos cuando los datos pueden existir previamente.
 
-# 
+## Reportes
 
-# \### `arbitraje`
+Se implementan Stored Procedures para los reportes solicitados por la materia.
 
-# 
+Entre ellos:
 
-# Gestiona:
+### Goleadores por selección, fase y torneo
 
-# 
+El procedimiento devuelve:
 
-# \- árbitros;
+1. ranking de goleadores por selección;
+2. ranking de goleadores por fase;
+3. ranking general del torneo.
 
-# \- idiomas;
+Se utilizan:
 
-# \- roles arbitrales;
+- `GROUP BY`;
+- `COUNT`;
+- `DENSE_RANK`;
+- funciones de ventana.
 
-# \- designaciones;
+Los goles en contra no son contabilizados como goles personales del jugador.
 
-# \- informes posteriores a los partidos.
+### Validación final
 
-# 
+Se incluye un script de validación de carga que permite comprobar:
 
-# \### `publicidad`
+- cantidad de registros de las tablas principales;
+- posibles duplicados;
+- relaciones entre entidades;
+- indicadores económicos;
+- tipos de cambio;
+- fuentes externas;
+- logs de importación;
+- errores registrados.
 
-# 
+Este script no modifica la información de la base.
 
-# Gestiona:
+## Ejecución
 
-# 
+Los archivos SQL están numerados para indicar su orden de ejecución.
 
-# \- anunciantes;
+Para reconstruir el proyecto desde cero:
 
-# \- campañas;
+1. Ejecutar el script de eliminación de la base, si corresponde.
+2. Crear `MundialFutbol`.
+3. Crear los esquemas.
+4. Crear las tablas.
+5. Crear funciones y Stored Procedures.
+6. Ejecutar los scripts de importación.
+7. Ejecutar la carga de datos.
+8. Ejecutar los tests.
+9. Ejecutar los reportes y validaciones finales.
 
-# \- tarifas;
+## Requisitos
 
-# \- piezas de contenido;
+- Microsoft SQL Server
+- SQL Server Management Studio
+- Python 3.13 o superior para los procesos que consumen APIs
+- Librerías Python:
+  - `requests`
+  - `pyodbc`
+- ODBC Driver 18 for SQL Server
 
-# \- espacios publicitarios;
+## Consideraciones
 
-# \- mercados de interés;
+Los scripts fueron diseñados para poder recrear la base de datos desde cero y demostrar durante la defensa:
 
-# \- exhibiciones publicitarias.
-
-# 
-
-# \### `integracion`
-
-# 
-
-# Se utiliza para los procesos de importación:
-
-# 
-
-# \- fuentes de datos;
-
-# \- logs de importación;
-
-# \- detalle de errores;
-
-# \- tablas de staging.
-
-# 
-
-# \## Stored Procedures
-
-# 
-
-# Se implementaron procedimientos almacenados para:
-
-# 
-
-# \- ABM de las entidades principales;
-
-# \- reglas de negocio;
-
-# \- registro de goles;
-
-# \- formaciones;
-
-# \- sustituciones;
-
-# \- tarjetas y sanciones;
-
-# \- validación de plantillas;
-
-# \- importación de datos externos;
-
-# \- carga mediante APIs;
-
-# \- generación de reportes.
-
-# 
-
-# Los procedimientos realizan validaciones y utilizan `THROW` para informar errores.
-
-# 
-
-# En los procesos que requieren iteración se prioriza la lógica de conjuntos y, cuando es necesario, se utilizan bucles `WHILE`. No se utilizan cursores.
-
-# 
-
-# \## Importaciones
-
-# 
-
-# El sistema permite importar información externa y registrar el resultado de cada proceso.
-
-# 
-
-# \### Partidos mediante CSV
-
-# 
-
-# Se utiliza un archivo `matches.csv`.
-
-# 
-
-# Flujo:
-
-# 
-
-# ```text
-
-# CSV
-
-# → tabla staging
-
-# → validaciones y transformaciones
-
-# → INSERT / UPDATE
-
-# → LogImportacion
-
-# → DetalleErrorImportacion
-
-# ```
-
-# 
-
-# La importación soporta procesamiento parcial: los registros válidos se procesan aunque otros registros presenten errores.
-
-# 
-
-# También implementa \*\*upsert\*\*, evitando generar duplicados al importar nuevamente el mismo dataset.
-
-# 
-
-# \### Árbitros mediante XML
-
-# 
-
-# Se implementó una importación desde XML para incorporar información arbitral.
-
-# 
-
-# \### World Bank API
-
-# 
-
-# Se utiliza la API del Banco Mundial para obtener información de \*\*PBI per cápita\*\*.
-
-# 
-
-# El proceso:
-
-# 
-
-# ```text
-
-# World Bank API
-
-# → Python
-
-# → JSON
-
-# → Stored Procedure
-
-# → general.IndicadorEconomico
-
-# ```
-
-# 
-
-# \### Frankfurter API
-
-# 
-
-# Se utiliza Frankfurter para obtener tipos de cambio entre las monedas registradas.
-
-# 
-
-# El proceso:
-
-# 
-
-# ```text
-
-# general.Moneda
-
-# → Frankfurter API
-
-# → Python
-
-# → JSON
-
-# → Stored Procedure
-
-# → general.TipoCambio
-
-# ```
-
-# 
-
-# Las importaciones mediante API también implementan lógica de actualización para evitar registros duplicados.
-
-# 
-
-# \## Testing
-
-# 
-
-# Los Stored Procedures cuentan con scripts de testing separados.
-
-# 
-
-# Las pruebas incluyen:
-
-# 
-
-# \- casos exitosos;
-
-# \- validaciones esperadas;
-
-# \- manejo de errores;
-
-# \- rollback de datos temporales;
-
-# \- savepoints;
-
-# \- pruebas de importación parcial;
-
-# \- pruebas de upsert.
-
-# 
-
-# Cuando una prueba debe fallar de manera intencional, se utilizan transacciones y savepoints para evitar perder los datos auxiliares necesarios para continuar con el resto de los tests.
-
-# 
-
-# \## Carga de datos
-
-# 
-
-# Se incluye un script de carga masiva con información representativa para permitir la ejecución de los reportes.
-
-# 
-
-# La carga contempla, entre otros:
-
-# 
-
-# \- países;
-
-# \- selecciones;
-
-# \- jugadores;
-
-# \- convocatorias;
-
-# \- partidos;
-
-# \- goles;
-
-# \- tarjetas;
-
-# \- sanciones;
-
-# \- árbitros;
-
-# \- campañas publicitarias;
-
-# \- exhibiciones.
-
-# 
-
-# Los scripts evitan depender de IDs fijos cuando los datos pueden existir previamente.
-
-# 
-
-# \## Reportes
-
-# 
-
-# Se implementan Stored Procedures para los reportes solicitados por la materia.
-
-# 
-
-# Entre ellos:
-
-# 
-
-# \### Goleadores por selección, fase y torneo
-
-# 
-
-# El procedimiento devuelve:
-
-# 
-
-# 1\. ranking de goleadores por selección;
-
-# 2\. ranking de goleadores por fase;
-
-# 3\. ranking general del torneo.
-
-# 
-
-# Se utilizan:
-
-# 
-
-# \- `GROUP BY`;
-
-# \- `COUNT`;
-
-# \- `DENSE\_RANK`;
-
-# \- funciones de ventana.
-
-# 
-
-# Los goles en contra no son contabilizados como goles personales del jugador.
-
-# 
-
-# \## Validación final
-
-# 
-
-# Se incluye un script de validación de carga que permite comprobar:
-
-# 
-
-# \- cantidad de registros de las tablas principales;
-
-# \- posibles duplicados;
-
-# \- relaciones entre entidades;
-
-# \- indicadores económicos;
-
-# \- tipos de cambio;
-
-# \- fuentes externas;
-
-# \- logs de importación;
-
-# \- errores registrados.
-
-# 
-
-# Este script no modifica la información de la base.
-
-# 
-
-# \## Ejecución
-
-# 
-
-# Los archivos SQL están numerados para indicar su orden de ejecución.
-
-# 
-
-# Para reconstruir el proyecto desde cero:
-
-# 
-
-# 1\. Ejecutar el script de eliminación de la base, si corresponde.
-
-# 2\. Crear `MundialFutbol`.
-
-# 3\. Crear los esquemas.
-
-# 4\. Crear las tablas.
-
-# 5\. Crear funciones y Stored Procedures.
-
-# 6\. Ejecutar los scripts de importación.
-
-# 7\. Ejecutar la carga de datos.
-
-# 8\. Ejecutar los tests.
-
-# 9\. Ejecutar los reportes y validaciones finales.
-
-# 
-
-# \## Requisitos
-
-# 
-
-# \- Microsoft SQL Server
-
-# \- SQL Server Management Studio
-
-# \- Python 3.13 o superior para los procesos que consumen APIs
-
-# \- Librerías Python:
-
-# &#x20; - `requests`
-
-# &#x20; - `pyodbc`
-
-# \- ODBC Driver 18 for SQL Server
-
-# 
-
-# \## Consideraciones
-
-# 
-
-# Los scripts fueron diseñados para poder recrear la base de datos desde cero y demostrar durante la defensa:
-
-# 
-
-# \- creación completa de la base;
-
-# \- carga de datos;
-
-# \- importaciones;
-
-# \- procesamiento parcial de errores;
-
-# \- upsert;
-
-# \- reglas de negocio;
-
-# \- ejecución de reportes.
-
+- creación completa de la base;
+- carga de datos;
+- importaciones;
+- procesamiento parcial de errores;
+- upsert;
+- reglas de negocio;
+- ejecución de reportes.
