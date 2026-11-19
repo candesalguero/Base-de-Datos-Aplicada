@@ -299,6 +299,18 @@
           <AssociatedConnUserName />
           <FullPath>82_Test_Reporte_Goleadores.sql</FullPath>
         </FileNode>
+        <FileNode Name="83_Configurar_Usuario_Metabase.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>83_Configurar_Usuario_Metabase.sql</FullPath>
+        </FileNode>
+        <FileNode Name="84_Consulta_BI_Goleadores.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>84_Consulta_BI_Goleadores.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Varios" Type="3" Sorted="true">
