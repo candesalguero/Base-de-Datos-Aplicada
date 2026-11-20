@@ -240,6 +240,27 @@ Se incluye un script de validación de carga que permite comprobar:
 
 Este script no modifica la información de la base.
 
+## Aplicación de escritorio
+
+Se incluye una aplicación WinForms (.NET 10) en `app/MundialFutbolApp/` con tres pantallas:
+
+- **Designaciones**: ABM completo de `arbitraje.DesignacionArbitral` 
+- **Importación CSV**: carga de partidos desde `matches.csv` usando `integracion.usp_ImportarPartidosCSV`, con resumen (insertados/actualizados/errores) y grilla de filas rechazadas.
+- **Reportes**: ejecución de los 4 reportes XML (resultados, tarjetas, designaciones, publicidad) con formateo, metadatos y guardado en disco.
+
+Guía de uso detallada: [`app/MundialFutbolApp/GUIA_USO.md`](app/MundialFutbolApp/GUIA_USO.md).
+
+Compilación:
+
+```powershell
+cd app\MundialFutbolApp
+dotnet restore
+dotnet build
+dotnet run
+```
+
+Requisitos: .NET SDK 10, SQL Server con la base `MundialFutbol` creada y los scripts ejecutados, y usuario de Windows con permisos de conexión (y `bulkadmin` para importar CSV).
+
 ## Ejecución
 
 Los archivos SQL están numerados para indicar su orden de ejecución.
